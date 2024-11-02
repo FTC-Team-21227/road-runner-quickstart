@@ -17,8 +17,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "AUTON20255")
-public class AUTON20255 extends LinearOpMode {
+@Autonomous(name = "AUTON2025REDRIGHT")
+public class AUTON2025REDRIGHT extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d initialPose = new Pose2d(0, 35, Math.toRadians(0));

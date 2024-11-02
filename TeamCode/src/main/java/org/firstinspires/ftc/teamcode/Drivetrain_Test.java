@@ -68,52 +68,52 @@ public class Drivetrain_Test extends OpMode {
    */
   @Override
   public void loop() {
-      // Put loop blocks here.
-      TelemetryPacket packet = new TelemetryPacket();
+    // Put loop blocks here.
+    TelemetryPacket packet = new TelemetryPacket();
 
-      // updated based on gamepads
-      if (gamepad1.a) {
-        runningActions.add(new SequentialAction(
-                new SleepAction(0.5),
-                new InstantAction(() -> servo.setPosition(0.5))
-        ));
-      }
+    // updated based on gamepads
+    if (gamepad1.a) {
+      runningActions.add(new SequentialAction(
+              new SleepAction(0.5),
+              new InstantAction(() -> servo.setPosition(0.5))
+      ));
+    }
 
-      // update running actions
-      List<Action> newActions = new ArrayList<>();
-      for (Action action : runningActions) {
-        action.preview(packet.fieldOverlay());
-        if (action.run(packet)) {
-          newActions.add(action);
-        }
+    // update running actions
+    List<Action> newActions = new ArrayList<>();
+    for (Action action : runningActions) {
+      action.preview(packet.fieldOverlay());
+      if (action.run(packet)) {
+        newActions.add(action);
       }
-      runningActions = newActions;
+    }
+    runningActions = newActions;
 
-      Calculate_IMU_Rotation_Power();
-      Calculate_Motor_Power();
-      W_BL.setPower(Motor_power_BL);
-      W_BR.setPower(Motor_power_BR);
-      W_FR.setPower(Motor_power_FR);
-      W_FL.setPower(Motor_power_FL);
-      ARM_Control();
-      if (gamepad1.dpad_right) {
-        imu.resetYaw();
-      }
-      dash.sendTelemetryPacket(packet);
-      telemetry.addData("Direction", Direction.firstAngle);
-      telemetry.addData("Motor Power", Motor_Power);
-      telemetry.addData("Side Power", Motor_side_power);
-      telemetry.addData("FWD Power", Motor_fwd_power);
-      telemetry.addData("IMU_Rotation Power", imu_rotation);
-      telemetry.addData("Rotation Power", Motor_Rotation_power);
-      telemetry.addData("Rotation Power", Motor_Rotation_power);
-      telemetry.addData("ODO_Left", W_FL.getCurrentPosition());
-      telemetry.addData("ODO_Right", W_FR.getCurrentPosition());
-      telemetry.addData("ODO_Center", W_BR.getCurrentPosition());
-      telemetry.addData("ARM1_Position", ARM1.getCurrentPosition());
-      telemetry.addData("ARM2_Position", ARM2.getTargetPosition());
-      telemetry.addData("ARM2_Position", ARM2.getCurrentPosition());
-      telemetry.update();
+    Calculate_IMU_Rotation_Power();
+    Calculate_Motor_Power();
+    W_BL.setPower(Motor_power_BL);
+    W_BR.setPower(Motor_power_BR);
+    W_FR.setPower(Motor_power_FR);
+    W_FL.setPower(Motor_power_FL);
+    ARM_Control();
+    if (gamepad1.dpad_right) {
+      imu.resetYaw();
+    }
+    dash.sendTelemetryPacket(packet);
+    telemetry.addData("Direction", Direction.firstAngle);
+    telemetry.addData("Motor Power", Motor_Power);
+    telemetry.addData("Side Power", Motor_side_power);
+    telemetry.addData("FWD Power", Motor_fwd_power);
+    telemetry.addData("IMU_Rotation Power", imu_rotation);
+    telemetry.addData("Rotation Power", Motor_Rotation_power);
+    telemetry.addData("Rotation Power", Motor_Rotation_power);
+    telemetry.addData("ODO_Left", W_FL.getCurrentPosition());
+    telemetry.addData("ODO_Right", W_FR.getCurrentPosition());
+    telemetry.addData("ODO_Center", W_BR.getCurrentPosition());
+    telemetry.addData("ARM1_Position", ARM1.getCurrentPosition());
+    telemetry.addData("ARM2_Position", ARM2.getTargetPosition());
+    telemetry.addData("ARM2_Position", ARM2.getCurrentPosition());
+    telemetry.update();
   }
 
   /**

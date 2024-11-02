@@ -13,41 +13,42 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.MecanumDrive2;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "AUTON20255BUCK")
-public class AUTON20255BUCK extends LinearOpMode {
-    public class Lift {
-        private DcMotorEx lift;
+@Autonomous(name = "AUTON2025REDLEFT")
+public class AUTON2025REDLEFT extends LinearOpMode {
+    public class ARM1 {
+        private DcMotorEx arm1;
 
-        public Lift(HardwareMap hardwareMap) {
-            lift = hardwareMap.get(DcMotorEx.class, "ARM1"); //ARM2
-            lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        public ARM1(HardwareMap hardwareMap) {
+            arm1 = hardwareMap.get(DcMotorEx.class, "ARM1");
+            arm1.setDirection(DcMotorSimple.Direction.REVERSE);
+            arm1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            arm1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         }
-
         public class LiftUp implements Action {
             private boolean initialized = false;
 
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    lift.setPower(-0.8);
+                    arm1.setPower(0.8);
                     initialized = true;
                 }
 
-                double pos = lift.getCurrentPosition();
+                double pos = arm1.getCurrentPosition();
                 telemetry.addData("liftPos", pos);
 //                packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos > -5000) {
+                if (pos < 5500) {
                     return true;
                 } else {
-                    lift.setPower(0);
+                    arm1.setPower(0);
                     return false;
                 }
             }
@@ -62,18 +63,83 @@ public class AUTON20255BUCK extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    lift.setPower(0.8);
+                    arm1.setPower(-0.8);
                     initialized = true;
                 }
 
-                double pos = lift.getCurrentPosition();
+                double pos = arm1.getCurrentPosition();
                 telemetry.addData("liftPos", pos);
                 //packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < -4000) {
+                if (pos > 200) {
                     return true;
                 } else {
-                    lift.setPower(0);
+                    arm1.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftDown(){
+            return new LiftDown();
+        }
+    }
+    public class ARM2 {
+        private DcMotorEx arm2;
+
+        public ARM2(HardwareMap hardwareMap) {
+            arm2 = hardwareMap.get(DcMotorEx.class, "ARM2"); //ARM2
+            arm2.setDirection(DcMotorSimple.Direction.REVERSE);
+            arm2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            arm2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        }
+        //public
+
+        public class LiftUp implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm2.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = arm2.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+//              packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos < 8000) {
+                    return true;
+                } else {
+                    arm2.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftUp() {
+            return new LiftUp();
+        }
+
+        public class LiftDown implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm2.setPower(-0.8);
+                    initialized = true;
+                }
+
+                double pos = arm2.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+                //packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos > 200) {
+                    return true;
+                } else {
+                    arm2.setPower(0);
                     return false;
                 }
             }
@@ -85,8 +151,10 @@ public class AUTON20255BUCK extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d initialPose = new Pose2d(0, 72, Math.toRadians(0));
-        MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        Lift lift = new Lift(hardwareMap);
+        MecanumDrive2 drive = new MecanumDrive2(hardwareMap, initialPose);
+        ARM1 arm1 = new ARM1(hardwareMap);
+        ARM2 arm2 = new ARM2(hardwareMap);
+
         //waitForStart();
         // vision here that outputs position
         int visionOutputPosition = 1;
@@ -122,15 +190,15 @@ public class AUTON20255BUCK extends LinearOpMode {
         // actions that need to happen on init; for instance, a claw tightening.
 
 
-        while (!isStopRequested() && !opModeIsActive()) {
-            int position = visionOutputPosition;
-            telemetry.addData("Position during Init", position);
-            telemetry.update();
-        }
-
-        int startPosition = visionOutputPosition;
-        telemetry.addData("Starting Position", startPosition);
-        telemetry.update();
+//        while (!isStopRequested() && !opModeIsActive()) {
+//            int position = visionOutputPosition;
+//            telemetry.addData("Position during Init", arm1.getCurrentPosition);
+//            telemetry.update();
+//        }
+//
+//        int startPosition = visionOutputPosition;
+//        telemetry.addData("Starting Position", startPosition);
+//        telemetry.update();
         waitForStart();
 
         //if (isStopRequested()) return;
@@ -147,11 +215,13 @@ public class AUTON20255BUCK extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-//                        trajectoryActionChosen,
-                        lift.liftUp(),
+             //           trajectoryActionChosen,
+                        arm1.liftUp(),
+                        arm2.liftUp(),
 //                        claw.openClaw(),
-                        lift.liftDown()
-//                        trajectoryActionCloseOut
+                        arm2.liftDown(),
+                        arm1.liftDown()
+               //         trajectoryActionCloseOut
                 )
         );
     }
