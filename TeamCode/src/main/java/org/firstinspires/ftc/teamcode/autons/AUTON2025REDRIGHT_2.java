@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.autons;
 
-import androidx.annotation.NonNull;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -11,14 +8,11 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "AUTON2025REDRIGHT")
-public class AUTON2025REDRIGHT extends LinearOpMode {
+public class AUTON2025REDRIGHT_2 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d initialPose = new Pose2d(0, 53.5, Math.toRadians(0));
@@ -29,34 +23,24 @@ public class AUTON2025REDRIGHT extends LinearOpMode {
         int visionOutputPosition = 1;
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-            .strafeTo(new Vector2d(17, 55))
-            .waitSeconds(1)
-            .setTangent(0)
-            .waitSeconds(1)
-            .splineTo(new Vector2d(10, 35), -Math.PI/2 )
-            .waitSeconds(1)
-            .strafeTo(new Vector2d(35,12))
-            .waitSeconds(1)
-            .strafeTo(new Vector2d(5, 12))
+            .lineToX(20)
+                .waitSeconds(1)
+                .lineToX(17)
+                .strafeTo(new Vector2d(17, 16))
                 .waitSeconds(1)
                 .setTangent(0)
-                .waitSeconds(1);
-//                .waitSeconds(2)
-//                .setTangent(Math.toRadians(90))
-//                .lineToY(48)
-//                .setTangent(Math.toRadians(0))
-//                .lineToX(32)
-//                .strafeTo(new Vector2d(44.5, 30))
-//                .turn(Math.toRadians(180))
-//                .lineToX(47.5)
-//                .waitSeconds(3);
-//        TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
+                .splineToSplineHeading(new Pose2d(48, 48, Math.toRadians(270)), Math.toRadians(270))
+                .splineTo(new Vector2d(15, 6), Math.toRadians(270));
+//                .turn(Math.toRadians(-180));
 
-//        TrajectoryActionBuilder tab3 = drive.actionBuilder(initialPose)
-//                .lineToYSplineHeading(33, Math.toRadians(180))
-//                .waitSeconds(2)
-//                .strafeTo(new Vector2d(46, 30))
-//                .waitSeconds(3);
+//            .splineTo(new Vector2d(10, 35), -Math.PI/2 )
+//            .waitSeconds(1)
+//            .strafeTo(new Vector2d(35,12))
+//            .waitSeconds(1)
+//            .strafeTo(new Vector2d(5, 12))
+//                .waitSeconds(1)
+//                .setTangent(0)
+//                .waitSeconds(1);
         Action trajectoryActionCloseOut = tab1.fresh()
                 //.strafeTo(new Vector2d(48, 12))
                 .build();
