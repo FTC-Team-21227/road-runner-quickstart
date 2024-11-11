@@ -26,7 +26,7 @@ public class AUTON20255BUCK extends LinearOpMode {
         public Lift(HardwareMap hardwareMap) {
             lift = hardwareMap.get(DcMotorEx.class, "ARM1"); //ARM2
             lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            lift.setDirection(DcMotorSimple.Direction.FORWARD);
+            lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         }
 

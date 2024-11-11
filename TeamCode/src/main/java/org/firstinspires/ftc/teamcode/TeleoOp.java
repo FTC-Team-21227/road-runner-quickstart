@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -21,6 +22,7 @@ public class TeleoOp extends LinearOpMode {
     private IMU imu;
     private DcMotor ARM1;
     private DcMotor ARM2;
+    private Servo HangServo;
 
     float Heading_Angle;
     double Motor_power_BR;
@@ -48,6 +50,7 @@ public class TeleoOp extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         ARM1 = hardwareMap.get(DcMotor.class, "ARM1");
         ARM2 = hardwareMap.get(DcMotor.class, "ARM2");
+        HangServo = hardwareMap.get(Servo.class, "HangServo");
 
         // Put initialization blocks here.
         Initialization();
@@ -87,22 +90,29 @@ public class TeleoOp extends LinearOpMode {
      * Describe this function...
      */
     private void ARM_Control() {
-        if (gamepad1.x) {
+        if (gamepad1.y){
             ARM1.setTargetPosition(6500);
-        }
-        if (gamepad1.b) {
-            ARM1.setTargetPosition(0);
-        }
-        if (gamepad1.dpad_right) {
             ARM2.setTargetPosition(10700);
         }
-        if (gamepad1.dpad_left) {
+        if (gamepad1.x) {
+            ARM1.setTargetPosition(6500);
+            ARM2.setTargetPosition(5000);
+        }
+        if (gamepad1.a) {
+            ARM1.setTargetPosition(0);
             ARM2.setTargetPosition(0);
         }
-        if (gamepad1.dpad_up) {
+        if (gamepad1.b){
+            ARM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            ARM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+        if (gamepad1.right_bumper) {
             ARM1.setTargetPosition(ARM1.getCurrentPosition() + 500);
-        } else if (gamepad1.dpad_down) {
+        } else if (gamepad1.right_trigger > 0.1) {
             ARM1.setTargetPosition(ARM1.getCurrentPosition() - 500);
+        }
+        if (ARM1.getCurrentPosition() > 7000){
+            ARM1.setTargetPosition(6500);
         }
         if (Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) < 15) {
             ARM1.setPower(0);
@@ -113,10 +123,13 @@ public class TeleoOp extends LinearOpMode {
                 ARM1.setPower(Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) * -0.01);
             ARM1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
-        if (gamepad1.y) {
+        if (gamepad1.left_bumper) {
             ARM2.setTargetPosition(ARM2.getCurrentPosition() + 500);
-        } else if (gamepad1.a) {
+        } else if (gamepad1.left_trigger > 0.1) {
             ARM2.setTargetPosition(ARM2.getCurrentPosition() - 500);
+        }
+        if (ARM2.getCurrentPosition() > 11000 && ARM1.getCurrentPosition() > 6000){
+            ARM2.setTargetPosition(10700);
         }
         if (Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) < 15) {
             ARM2.setPower(0);
