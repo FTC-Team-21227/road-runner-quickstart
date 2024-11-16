@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -12,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "TeleoOp (Blocks to Java)")
-public class TeleoOp extends LinearOpMode {
+@TeleOp(name = "ArmServoPresets")
+public class ArmServoPresets extends LinearOpMode {
 
     private DcMotor W_BL;
     private DcMotor W_BR;
@@ -23,6 +24,8 @@ public class TeleoOp extends LinearOpMode {
     private DcMotor ARM1;
     private DcMotor ARM2;
     private Servo HangServo;
+    private CRServo Roller;
+    private Servo IntakeAngle;
 
     float Heading_Angle;
     double Motor_power_BR;
@@ -50,7 +53,11 @@ public class TeleoOp extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         ARM1 = hardwareMap.get(DcMotor.class, "ARM1");
         ARM2 = hardwareMap.get(DcMotor.class, "ARM2");
-        HangServo = hardwareMap.get(Servo.class, "HangServo");
+        HangServo = hardwareMap.get(Servo.class, "Hook");
+        IntakeAngle = hardwareMap.get(Servo.class, "Intake_Angle");
+        Roller = hardwareMap.get(CRServo.class, "Roller");
+        HangServo = hardwareMap.get(Servo.class, "Hook");
+
 
         // Put initialization blocks here.
         Initialization();
@@ -64,7 +71,7 @@ public class TeleoOp extends LinearOpMode {
                 W_BR.setPower(Motor_power_BR);
                 W_FR.setPower(Motor_power_FR);
                 W_FL.setPower(Motor_power_FL);
-                ARM_Control();
+                ArmServoControl();
                 if (gamepad1.dpad_right) {
                     imu.resetYaw();
                 }
@@ -89,30 +96,25 @@ public class TeleoOp extends LinearOpMode {
     /**
      * Describe this function...
      */
-    private void ARM_Control() {
-        if (gamepad1.y){
-            ARM1.setTargetPosition(6500);
-            ARM2.setTargetPosition(10700);
+    private void ArmServoControl() {
+        if (gamepad1.y){//NOTE: base arm negative moves towards front, 2nd arm neg moves towards robot
+            Roller.setPower(-0.45);//inwards
         }
         if (gamepad1.x) {
-            ARM1.setTargetPosition(6500);
-            ARM2.setTargetPosition(5000);
+            Roller.setPower(0.45);//outwards
         }
-        if (gamepad1.a) {
-            ARM1.setTargetPosition(0);
-            ARM2.setTargetPosition(0);
+        if (gamepad1.a) {//high rung
+            ARM1.setTargetPosition(3140);
+            ARM2.setTargetPosition(3517);
         }
-        if (gamepad1.b){
-            ARM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            ARM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        if (gamepad1.b){//high bucket
+            ARM1.setTargetPosition(8508);
+            ARM2.setTargetPosition(6020);
         }
         if (gamepad1.right_bumper) {
             ARM1.setTargetPosition(ARM1.getCurrentPosition() + 500);
         } else if (gamepad1.right_trigger > 0.1) {
             ARM1.setTargetPosition(ARM1.getCurrentPosition() - 500);
-        }
-        if (ARM1.getCurrentPosition() > 7000){
-            ARM1.setTargetPosition(6500);
         }
         if (Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) < 15) {
             ARM1.setPower(0);

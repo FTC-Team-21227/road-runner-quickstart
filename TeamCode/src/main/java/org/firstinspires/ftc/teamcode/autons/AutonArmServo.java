@@ -11,11 +11,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name = "testingSpline")
-public class testingSpline extends LinearOpMode {
+@Autonomous(name = "AutonArmServo")
+public class AutonArmServo extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d initialPose = new Pose2d(0, 48, Math.toRadians(0));
+        Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(0));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         //waitForStart();
@@ -23,7 +23,9 @@ public class testingSpline extends LinearOpMode {
         int visionOutputPosition = 1;
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .lineToX(10);
+                .setTangent(0)
+                .turn(Math.toRadians(135))
+                .strafeTo(new Vector2d(-10, -10));
 //                .setTangent(0)
 //                .splineToSplineHeading(new Pose2d(0, 0, Math.toRadians(-180)), Math.toRadians(-270))
 //                .waitSeconds(2)
