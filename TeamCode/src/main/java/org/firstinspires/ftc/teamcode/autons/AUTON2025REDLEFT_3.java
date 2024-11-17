@@ -21,8 +21,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "AUTON2025REDLEFT_3")
 public class AUTON2025REDLEFT_3 extends LinearOpMode{
-    private Servo Claw;
-    private Servo Intake_Angle;
     public class ARM1 {
         private DcMotorEx arm1;
 
@@ -48,7 +46,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //                packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 8508) {
+                if (pos < 10232) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -73,7 +71,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //                packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 3140) {
+                if (pos < 2336) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -124,7 +122,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
                 //packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos > -100) {
+                if (pos > 100) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -136,9 +134,9 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             return new AUTON2025REDLEFT_3.ARM1.LiftDown();
         }
     }
+
     public class CLAW {
         private Servo Claw;
-
         public CLAW(HardwareMap hardwareMap) {
             Claw = hardwareMap.get(Servo.class, "Claw");
         }
@@ -146,7 +144,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         public class CloseClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                Claw.setPosition(0.55);
+                Claw.setPosition(0.2);
                 return false;
             }
         }
@@ -157,12 +155,41 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         public class OpenClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                Claw.setPosition(1.0);
+                Claw.setPosition(0.8);
                 return false;
             }
         }
         public Action openClaw() {
             return new OpenClaw();
+        }
+    }
+    public class INTAKE_ANGLE {
+        private Servo Intake_Angle;
+
+        public INTAKE_ANGLE(HardwareMap hardwareMap) {
+            Intake_Angle = hardwareMap.get(Servo.class, "Intake_Angle");
+        }
+
+        public class RotatePosition0 implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Intake_Angle.setPosition(0.65);
+                return false;
+            }
+        }
+        public Action RotatePosition0() {
+            return new RotatePosition0();
+        }
+
+        public class RotatePosition1 implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Intake_Angle.setPosition(0.98);
+                return false;
+            }
+        }
+        public Action RotatePosition1() {
+            return new RotatePosition1();
         }
     }
     public class ARM2 {
@@ -192,7 +219,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //              packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 6020) {
+                if (pos < 7510) {
                     return true;
                 } else {
                     arm2.setPower(0);
@@ -217,7 +244,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //              packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 3517) {
+                if (pos < 4432) {
                     return true;
                 } else {
                     arm2.setPower(0);
@@ -252,6 +279,30 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         }
         public Action liftWallUp() {
             return new AUTON2025REDLEFT_3.ARM2.LiftWallUp();
+        }
+        public class LiftFloorUp implements Action {
+            private boolean initialized = false;
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm2.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = arm2.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+                //packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos > 7200) {
+                    return true;
+                } else {
+                    arm2.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftFloorUp(){
+            return new AUTON2025REDLEFT_3.ARM2.LiftFloorUp();
         }
 
         public class LiftDown implements Action {
@@ -291,7 +342,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
 //        Hook = hardwareMap.get(Servo.class, "Hook");
 //        Claw = hardwareMap.get(Servo.class, "Claw");
 
-        Intake_Angle = hardwareMap.get(Servo.class,"Intake_Angle");
+        AUTON2025REDLEFT_3.INTAKE_ANGLE intake_angle = new AUTON2025REDLEFT_3.INTAKE_ANGLE(hardwareMap)
 
         //waitForStart();
         // vision here that outputs position
@@ -334,6 +385,9 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
 //        int startPosition = visionOutputPosition;
 //        telemetry.addData("Starting Position", startPosition);
 //        telemetry.update();
+        claw.closeClaw();
+        intake_angle.RotatePosition0();
+
         waitForStart();
 
         //if (isStopRequested()) return;
