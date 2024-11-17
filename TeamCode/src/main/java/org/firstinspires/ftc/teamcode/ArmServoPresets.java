@@ -23,9 +23,9 @@ public class ArmServoPresets extends LinearOpMode {
     private IMU imu;
     private DcMotor ARM1;
     private DcMotor ARM2;
-    private Servo HangServo;
-    private CRServo Roller;
-    private Servo IntakeAngle;
+    private Servo Hook;
+    private Servo Claw;
+    private Servo Intake_Angle;
 
     float Heading_Angle;
     double Motor_power_BR;
@@ -53,10 +53,10 @@ public class ArmServoPresets extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         ARM1 = hardwareMap.get(DcMotor.class, "ARM1");
         ARM2 = hardwareMap.get(DcMotor.class, "ARM2");
-        HangServo = hardwareMap.get(Servo.class, "Hook");
-        IntakeAngle = hardwareMap.get(Servo.class, "Intake_Angle");
-        Roller = hardwareMap.get(CRServo.class, "Roller");
-        HangServo = hardwareMap.get(Servo.class, "Hook");
+        Hook = hardwareMap.get(Servo.class, "Hook");
+        Intake_Angle = hardwareMap.get(Servo.class, "Intake_Angle");
+        Claw = hardwareMap.get(Servo.class, "Claw");
+        Hook = hardwareMap.get(Servo.class, "Hook");
 
 
         // Put initialization blocks here.
@@ -98,10 +98,10 @@ public class ArmServoPresets extends LinearOpMode {
      */
     private void ArmServoControl() {
         if (gamepad1.y){//NOTE: base arm negative moves towards front, 2nd arm neg moves towards robot
-            Roller.setPower(-0.45);//inwards
+            Claw.setPower(-0.45);//inwards
         }
         if (gamepad1.x) {
-            Roller.setPower(0.45);//outwards
+            Claw.setPower(0.45);//outwards
         }
         if (gamepad1.a) {//high rung
             ARM1.setTargetPosition(3140);
