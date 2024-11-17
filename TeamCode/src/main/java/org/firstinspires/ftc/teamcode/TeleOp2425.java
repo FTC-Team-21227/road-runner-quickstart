@@ -48,6 +48,8 @@ public class TeleOp2425 extends LinearOpMode {
     double Motor_Rotation_power;
     double Motor_Power;
     boolean liftManualControl = true;
+    int x = 0;
+    int y = 0;
 
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
@@ -80,6 +82,7 @@ public class TeleOp2425 extends LinearOpMode {
                 W_FR.setPower(Motor_power_FR);
                 W_FL.setPower(Motor_power_FL);
                 ARM_Control();
+
                 if (gamepad1.dpad_right) {
                     imu.resetYaw();
                 }
@@ -98,6 +101,7 @@ public class TeleOp2425 extends LinearOpMode {
                 telemetry.addData("ARM2_Position", ARM2.getCurrentPosition());
                 telemetry.addData("ARM1 Pressed:",ARM1Sensor.isPressed());
                 telemetry.addData("Claw", Claw.getPosition());
+                telemetry.addData("x: ", x);
                 telemetry.update();
             }
         }
@@ -168,7 +172,15 @@ public class TeleOp2425 extends LinearOpMode {
 //            Roller.setPower(0.45);//outwards
 //        }
         if (gamepad1.dpad_up){
-            Claw.setPosition(0);
+            Claw.setPosition(x);
+            x = (int)Math.ceil(-1*x+0.5);
+        }
+        if (gamepad1.dpad_right){
+            Intake_Angle.setPosition(0);
+            y = (int)Math.ceil(-1*x+0.5);
+        }
+        if (gamepad1.dpad_left){
+            Hook.setPosition(0);
         }
         if (gamepad1.x) {//high rung
             ARM1.setTargetPosition(3140);
@@ -182,7 +194,7 @@ public class TeleOp2425 extends LinearOpMode {
             ARM1.setTargetPosition(0);
             ARM2.setTargetPosition(10000);
         }
-        if (gamepad1.b){
+        if (gamepad1.b){//wall
             ARM1.setTargetPosition(0);
             ARM2.setTargetPosition(10000);
         }
@@ -262,6 +274,7 @@ public class TeleOp2425 extends LinearOpMode {
         ARM2.setTargetPosition(0);
         telemetry.addData("Claw",Claw.getPosition());
         telemetry.update();
+        Claw.scaleRange(0,1);
 
         Motor_Power = 0.4;
         Targeting_Angle = 0;

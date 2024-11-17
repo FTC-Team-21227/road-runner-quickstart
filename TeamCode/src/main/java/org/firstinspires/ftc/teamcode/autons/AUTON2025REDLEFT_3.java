@@ -90,6 +90,31 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         public Action liftRungUp() {
             return new AUTON2025REDLEFT_3.ARM1.LiftRungUp();
         }
+        public class LiftWallUp implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm1.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = arm1.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+//                packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos < 3140) {
+                    return true;
+                } else {
+                    arm1.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftWallUp() {
+            return new AUTON2025REDLEFT_3.ARM1.LiftWallUp();
+        }
 
         public class LiftDown implements Action {
             private boolean initialized = false;
@@ -179,6 +204,31 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         }
         public Action liftRungUp() {
             return new AUTON2025REDLEFT_3.ARM2.LiftRungUp();
+        }
+        public class LiftWallUp implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm2.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = arm2.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+//                packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos < 3140) {
+                    return true;
+                } else {
+                    arm2.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftWallUp() {
+            return new AUTON2025REDLEFT_3.ARM2.LiftWallUp();
         }
 
         public class LiftDown implements Action {

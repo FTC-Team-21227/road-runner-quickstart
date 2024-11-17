@@ -56,8 +56,6 @@ public class ArmServoPresets extends LinearOpMode {
         Hook = hardwareMap.get(Servo.class, "Hook");
         Intake_Angle = hardwareMap.get(Servo.class, "Intake_Angle");
         Claw = hardwareMap.get(Servo.class, "Claw");
-        Hook = hardwareMap.get(Servo.class, "Hook");
-
 
         // Put initialization blocks here.
         Initialization();
