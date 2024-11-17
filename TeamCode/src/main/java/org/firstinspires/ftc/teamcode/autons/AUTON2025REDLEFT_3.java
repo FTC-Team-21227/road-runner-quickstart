@@ -12,17 +12,23 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "AUTON2025REDLEFT_3")
 public class AUTON2025REDLEFT_3 extends LinearOpMode{
+    private Servo Hook;
+    private Servo Claw;
+    private Servo Intake_Angle;
     public class ARM1 {
         private DcMotorEx arm1;
 
@@ -34,7 +40,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             arm1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         }
-        public class LiftUp implements Action {
+        public class LiftBucketUp implements Action {
             private boolean initialized = false;
 
             @Override
@@ -48,7 +54,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //                packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 6650) {
+                if (pos < 8508) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -56,8 +62,33 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 }
             }
         }
-        public Action liftUp() {
-            return new AUTON2025REDLEFT_3.ARM1.LiftUp();
+        public Action liftBucketUp() {
+            return new AUTON2025REDLEFT_3.ARM1.LiftBucketUp();
+        }
+        public class LiftRungUp implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm1.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = arm1.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+//                packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos < 3140) {
+                    return true;
+                } else {
+                    arm1.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftRungUp() {
+            return new AUTON2025REDLEFT_3.ARM1.LiftRungUp();
         }
 
         public class LiftDown implements Action {
@@ -99,7 +130,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         }
         //public
 
-        public class LiftUp implements Action {
+        public class LiftBucketUp implements Action {
             private boolean initialized = false;
 
             @Override
@@ -113,7 +144,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //              packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 10782) {
+                if (pos < 6020) {
                     return true;
                 } else {
                     arm2.setPower(0);
@@ -121,10 +152,10 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 }
             }
         }
-        public Action liftUp() {
-            return new AUTON2025REDLEFT_3.ARM2.LiftUp();
+        public Action liftBucketUp() {
+            return new AUTON2025REDLEFT_3.ARM2.LiftBucketUp();
         }
-        public class LiftUp2 implements Action {
+        public class LiftRungUp implements Action {
             private boolean initialized = false;
 
             @Override
@@ -138,7 +169,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //              packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 6000) {
+                if (pos < 3517) {
                     return true;
                 } else {
                     arm2.setPower(0);
@@ -146,8 +177,8 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 }
             }
         }
-        public Action liftUp2() {
-            return new AUTON2025REDLEFT_3.ARM2.LiftUp2();
+        public Action liftRungUp() {
+            return new AUTON2025REDLEFT_3.ARM2.LiftRungUp();
         }
 
         public class LiftDown implements Action {
@@ -182,6 +213,9 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         AUTON2025REDLEFT_3.ARM1 arm1 = new AUTON2025REDLEFT_3.ARM1(hardwareMap);
         AUTON2025REDLEFT_3.ARM2 arm2 = new AUTON2025REDLEFT_3.ARM2(hardwareMap);
+        Hook = hardwareMap.get(Servo.class, "Hook");
+        Claw = hardwareMap.get(Servo.class, "Claw");
+        Intake_Angle = hardwareMap.get(Servo.class,"Intake_Angle");
 
         //waitForStart();
         // vision here that outputs position
@@ -243,16 +277,16 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
 
         Actions.runBlocking(
                 new SequentialAction(
-                        //           trajectoryActionChosen,
                         new ParallelAction(
-                            arm1.liftUp(),
-                            arm2.liftUp()
+                                arm1.liftRungUp(),
+                                arm2.liftRungUp()
                         ),
+                        trajectoryActionChosen,
 //                        claw.openClaw(),
                         new ParallelAction(
                             arm2.liftDown(),
                             arm1.liftDown()
-                                )
+                        )
                         //         trajectoryActionCloseOut
                 )
         );

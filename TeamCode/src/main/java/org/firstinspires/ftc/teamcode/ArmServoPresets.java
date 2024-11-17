@@ -97,12 +97,12 @@ public class ArmServoPresets extends LinearOpMode {
      * Describe this function...
      */
     private void ArmServoControl() {
-        if (gamepad1.y){//NOTE: base arm negative moves towards front, 2nd arm neg moves towards robot
-            Claw.setPower(-0.45);//inwards
-        }
-        if (gamepad1.x) {
-            Claw.setPower(0.45);//outwards
-        }
+//        if (gamepad1.y){//NOTE: base arm negative moves towards front, 2nd arm neg moves towards robot
+//            Claw.setPower(-0.45);//inwards
+//        }
+//        if (gamepad1.x) {
+//            Claw.setPower(0.45);//outwards
+//        }
         if (gamepad1.a) {//high rung
             ARM1.setTargetPosition(3140);
             ARM2.setTargetPosition(3517);
