@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.autons.AUTON2025REDLEFT_3;
 
 @TeleOp(name = "TeleOp2425")
 public class TeleOp2425 extends LinearOpMode {
@@ -29,7 +30,7 @@ public class TeleOp2425 extends LinearOpMode {
     private DcMotor ARM1; //bottom arm
     private DcMotor ARM2; //top arm
     private Servo HangServo;
-    private Servo Hook;
+    private CRServo Hook;
     private Servo Intake_Angle;
     private Servo Claw;
     private TouchSensor ARM1Sensor;
@@ -48,8 +49,8 @@ public class TeleOp2425 extends LinearOpMode {
     double Motor_Rotation_power;
     double Motor_Power;
     boolean liftManualControl = true;
-    int x = 0;
-    int y = 0;
+    double x = 0;
+    double y = 0;
 
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
@@ -63,7 +64,7 @@ public class TeleOp2425 extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         ARM1 = hardwareMap.get(DcMotor.class, "ARM1");
         ARM2 = hardwareMap.get(DcMotor.class, "ARM2");
-        Hook = hardwareMap.get(Servo.class, "Hook");
+        Hook = hardwareMap.get(CRServo.class, "Hook");
         Claw = hardwareMap.get(Servo.class, "Claw");
         Intake_Angle = hardwareMap.get(Servo.class,"Intake_Angle");
         ARM1Sensor = hardwareMap.get(TouchSensor.class, "ARM1Sensor");
@@ -164,44 +165,122 @@ public class TeleOp2425 extends LinearOpMode {
 //        }
 //    }
 
+//    private void ARM_Control() {
+////        if (gamepad1.y){//NOTE: base arm negative moves towards front, 2nd arm neg moves towards robot
+////            Roller.setPower(-0.45);//inwards
+////        }
+////        if (gamepad1.x) {
+////            Roller.setPower(0.45);//outwards
+////        }
+//        if (gamepad1.dpad_up){
+//            Claw.setPosition(x);
+//            x = (int)Math.ceil(-1*x+0.5);
+//        }
+//        if (gamepad1.dpad_right){
+//            Intake_Angle.setPosition(0);
+//            y = (int)Math.ceil(-1*x+0.5);
+//        }
+//        if (gamepad1.dpad_left){
+//            Hook.setPower(0.5);
+//        }
+//        if (gamepad1.x) {//high rung
+//            ARM1.setTargetPosition(3140);
+//            ARM2.setTargetPosition(3517);
+//        }
+//        if (gamepad1.y){//high bucket
+//            ARM1.setTargetPosition(8508);
+//            ARM2.setTargetPosition(6020);
+//        }
+//        if (gamepad1.a){//floor
+//            ARM1.setTargetPosition(0);
+//            ARM2.setTargetPosition(10000);
+//        }
+//        if (gamepad1.b){//wall
+//            ARM1.setTargetPosition(0);
+//            ARM2.setTargetPosition(10000);
+//        }
+//        if (gamepad1.right_bumper) {
+//            ARM1.setTargetPosition(ARM1.getCurrentPosition() + 300);
+//        } else if (gamepad1.right_trigger > 0.1) {
+//            ARM1.setTargetPosition(ARM1.getCurrentPosition() - 300);
+//        }
+//        if (Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) < 15) {
+//            ARM1.setPower(0);
+//        } else {
+//            if (ARM1.getCurrentPosition() < ARM1.getTargetPosition())
+//                ARM1.setPower(Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) * 0.01);
+//            else
+//                ARM1.setPower(Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) * -0.01);
+//            ARM1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
+//        if (gamepad1.left_bumper) {
+//            ARM2.setTargetPosition(ARM2.getCurrentPosition() + 300);
+//        } else if (gamepad1.left_trigger > 0.1) {
+//            ARM2.setTargetPosition(ARM2.getCurrentPosition() - 300);
+//        }
+//        if (ARM2.getCurrentPosition() > 11000 && ARM1.getCurrentPosition() > 6000){
+//            ARM2.setTargetPosition(10700);
+//        }
+//        if (Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) < 15) {
+//            ARM2.setPower(0);
+//        } else {
+//            if (ARM2.getCurrentPosition() < ARM2.getTargetPosition())
+//                ARM2.setPower(Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) * 0.001);
+//            else
+//                ARM2.setPower(Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) * -0.001);
+//            ARM2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
+//    }
     private void ARM_Control() {
-//        if (gamepad1.y){//NOTE: base arm negative moves towards front, 2nd arm neg moves towards robot
-//            Roller.setPower(-0.45);//inwards
-//        }
-//        if (gamepad1.x) {
-//            Roller.setPower(0.45);//outwards
-//        }
+        if (gamepad1.dpad_right){
+            Intake_Angle.setPosition(1);
+        }
+        if (gamepad1.dpad_left) {
+            Intake_Angle.setPosition(0);
+        }
         if (gamepad1.dpad_up){
+            Hook.setPower(0.5);
+            sleep(1000);
+            Hook.setPower(0);
+        }
+        if (gamepad1.dpad_down) {
+            Intake_Angle.setPosition(0.5);
+        }
+        if (gamepad1.x) {//high rung
+            ARM1.setTargetPosition(2336);
+            ARM2.setTargetPosition(4432);
+        }
+        if (gamepad1.y){//high bucket
+            ARM1.setTargetPosition(10232);
+            ARM2.setTargetPosition(6728);
+        }
+        if (gamepad1.a){//floor
+            ARM1.setTargetPosition(470);
+            ARM2.setTargetPosition(6620);
+        }
+        if (gamepad1.b){
             Claw.setPosition(x);
             x = (int)Math.ceil(-1*x+0.5);
         }
-        if (gamepad1.dpad_right){
-            Intake_Angle.setPosition(0);
-            y = (int)Math.ceil(-1*x+0.5);
-        }
-        if (gamepad1.dpad_left){
-            Hook.setPosition(0);
-        }
-        if (gamepad1.x) {//high rung
-            ARM1.setTargetPosition(3140);
-            ARM2.setTargetPosition(3517);
-        }
-        if (gamepad1.y){//high bucket
-            ARM1.setTargetPosition(8508);
-            ARM2.setTargetPosition(6020);
-        }
-        if (gamepad1.a){//floor
-            ARM1.setTargetPosition(0);
-            ARM2.setTargetPosition(10000);
-        }
-        if (gamepad1.b){//wall
-            ARM1.setTargetPosition(0);
-            ARM2.setTargetPosition(10000);
+//        if (gamepad1.b){//wall
+//            ARM1.setTargetPosition(0);
+//            ARM2.setTargetPosition(10000);
+//        }
+        Intake_Angle.setPosition(0.5);
+        if (gamepad1.right_trigger > 0.1 && gamepad1.left_trigger > 0.1) {
+            while (ARM2Sensor.isPressed()) {
+                ARM2.setPower(-0.5);
+            }
+            ARM2.setPower(0);
+            while (ARM1Sensor.isPressed()) {
+                ARM1.setPower(-0.5);
+            }
+            ARM1.setPower(0);
         }
         if (gamepad1.right_bumper) {
-            ARM1.setTargetPosition(ARM1.getCurrentPosition() + 300);
+            ARM1.setTargetPosition(ARM1.getCurrentPosition() + 250);
         } else if (gamepad1.right_trigger > 0.1) {
-            ARM1.setTargetPosition(ARM1.getCurrentPosition() - 300);
+            ARM1.setTargetPosition(ARM1.getCurrentPosition() - 250);
         }
         if (Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) < 15) {
             ARM1.setPower(0);
@@ -213,13 +292,13 @@ public class TeleOp2425 extends LinearOpMode {
             ARM1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         if (gamepad1.left_bumper) {
-            ARM2.setTargetPosition(ARM2.getCurrentPosition() + 300);
+            ARM2.setTargetPosition(ARM2.getCurrentPosition() + 250);
         } else if (gamepad1.left_trigger > 0.1) {
-            ARM2.setTargetPosition(ARM2.getCurrentPosition() - 300);
+            ARM2.setTargetPosition(ARM2.getCurrentPosition() - 250);
         }
-        if (ARM2.getCurrentPosition() > 11000 && ARM1.getCurrentPosition() > 6000){
-            ARM2.setTargetPosition(10700);
-        }
+//        if (ARM2.getCurrentPosition() > 11000 && ARM1.getCurrentPosition() > 6000){
+//            ARM2.setTargetPosition(10700);
+//        }
         if (Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) < 15) {
             ARM2.setPower(0);
         } else {
@@ -237,10 +316,10 @@ public class TeleOp2425 extends LinearOpMode {
     private void Initialization() {
         double Lift_Power;
 
-        W_FR.setDirection(DcMotor.Direction.FORWARD);
-        W_FL.setDirection(DcMotor.Direction.FORWARD);
-        W_BR.setDirection(DcMotor.Direction.REVERSE);
-        W_BL.setDirection(DcMotor.Direction.FORWARD);
+        W_FR.setDirection(DcMotor.Direction.REVERSE);
+        W_FL.setDirection(DcMotor.Direction.REVERSE);
+        W_BR.setDirection(DcMotor.Direction.FORWARD);
+        W_BL.setDirection(DcMotor.Direction.REVERSE);
         W_FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         W_FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         W_BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -254,27 +333,29 @@ public class TeleOp2425 extends LinearOpMode {
         W_BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         W_BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         ARM1.setDirection(DcMotor.Direction.REVERSE);
+        ARM2.setDirection(DcMotor.Direction.REVERSE);
+        while (ARM2Sensor.isPressed()) {
+            ARM2.setPower(-0.5);
+            telemetry.addData("arm2:",ARM2Sensor.isPressed());
+            telemetry.update();
+        }
         while (ARM1Sensor.isPressed()) {
-            ARM1.setPower(-0.2);
+            ARM1.setPower(-0.5);
             telemetry.addData("arm1:",ARM1Sensor.isPressed());
             telemetry.update();
         }
+        ARM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ARM2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        ARM2.setTargetPosition(0);
+
         ARM1.setPower(0);
         ARM1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         ARM1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         ARM1.setTargetPosition(0);
-        ARM2.setDirection(DcMotor.Direction.REVERSE);
-//        while (ARM2Sensor.isPressed()) {
-//            ARM2.setPower(-0.2);
-//            telemetry.addData("arm2:",ARM2Sensor.isPressed());
-//            telemetry.update();
-//        }
-        ARM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ARM2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        ARM2.setTargetPosition(0);
         telemetry.addData("Claw",Claw.getPosition());
         telemetry.update();
-        Claw.scaleRange(0,1);
+        Claw.scaleRange(0.2,0.8);
+        Intake_Angle.scaleRange(0.2, 0.8);
 
         Motor_Power = 0.4;
         Targeting_Angle = 0;
