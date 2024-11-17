@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.autons;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import androidx.annotation.NonNull;
-import com.acmerobotics.dashboard.config.Config;
+
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -12,16 +10,13 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "AUTON2025REDLEFT_3")
@@ -140,6 +135,64 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         }
         public Action liftDown(){
             return new AUTON2025REDLEFT_3.ARM1.LiftDown();
+        }
+    }
+    public class CLAW {
+        private Servo Claw;
+
+        public CLAW(HardwareMap hardwareMap) {
+            Claw = hardwareMap.get(Servo.class, "Claw");
+        }
+
+        public class CloseClaw implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Claw.setPosition(0.55);
+                return false;
+            }
+        }
+        public Action closeClaw() {
+            return new CloseClaw();
+        }
+
+        public class OpenClaw implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Claw.setPosition(1.0);
+                return false;
+            }
+        }
+        public Action openClaw() {
+            return new OpenClaw();
+        }
+    }
+    public class HOOK {
+        private Servo Hook;
+
+        public HOOK(HardwareMap hardwareMap) {
+            Hook = hardwareMap.get(Servo.class, "Hook");
+        }
+
+        public class CloseClaw implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Hook.setPosition(0.55);
+                return false;
+            }
+        }
+        public Action closeClaw() {
+            return new CloseClaw();
+        }
+
+        public class OpenClaw implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Hook.setPosition(1.0);
+                return false;
+            }
+        }
+        public Action openClaw() {
+            return new OpenClaw();
         }
     }
     public class ARM2 {
@@ -263,8 +316,12 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         AUTON2025REDLEFT_3.ARM1 arm1 = new AUTON2025REDLEFT_3.ARM1(hardwareMap);
         AUTON2025REDLEFT_3.ARM2 arm2 = new AUTON2025REDLEFT_3.ARM2(hardwareMap);
-        Hook = hardwareMap.get(Servo.class, "Hook");
-        Claw = hardwareMap.get(Servo.class, "Claw");
+
+        AUTON2025REDLEFT_3.CLAW claw = new AUTON2025REDLEFT_3.CLAW(hardwareMap);
+        AUTON2025REDLEFT_3.HOOK hook = new AUTON2025REDLEFT_3.HOOK(hardwareMap);
+//        Hook = hardwareMap.get(Servo.class, "Hook");
+//        Claw = hardwareMap.get(Servo.class, "Claw");
+
         Intake_Angle = hardwareMap.get(Servo.class,"Intake_Angle");
 
         //waitForStart();
@@ -272,22 +329,19 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         int visionOutputPosition = 1;
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .lineToX(20)
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(10, 90))
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(35,110))
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(10, 120));
-//                .waitSeconds(2)
-//                .setTangent(Math.toRadians(90))
-//                .lineToY(48)
-//                .setTangent(Math.toRadians(0))
-//                .lineToX(32)
-//                .strafeTo(new Vector2d(44.5, 30))
-//                .turn(Math.toRadians(180))
-//                .lineToX(47.5)
-//                .waitSeconds(3);
+                .lineToX(30)
+                .waitSeconds(2)
+                .strafeTo(new Vector2d(13, 115))
+                .waitSeconds(2)
+                .turn(Math.toRadians(225))//face basket
+                .waitSeconds(2)
+                .strafeTo(new Vector2d(115, 115))
+                .waitSeconds(2)
+
+                .turn(Math.toRadians(235)) //get second sample
+                .waitSeconds(2)
+                .turn(Math.toRadians(125)) //face basket
+                ;
 //        TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
 
 //        TrajectoryActionBuilder tab3 = drive.actionBuilder(initialPose)
@@ -315,23 +369,23 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
 
         //if (isStopRequested()) return;
 
-        Action trajectoryActionChosen;
+        Action firstTrajectory;
         //if (startPosition == 1) {
-        trajectoryActionChosen = tab1.build();
+        firstTrajectory = tab1.build();
         //}
 //        } else if (startPosition == 2) {
-//            trajectoryActionChosen = tab2.build();
+//            firstTrajectory = tab2.build();
 //        } else {
-//            trajectoryActionChosen = tab3.build();
+//            firstTrajectory = tab3.build();
 //        }
 
         Actions.runBlocking(
                 new SequentialAction(
                         new ParallelAction(
                                 arm1.liftRungUp(),
-                                arm2.liftRungUp()
+                                arm2.liftRungUp(),
+                                firstTrajectory
                         ),
-                        trajectoryActionChosen,
 //                        claw.openClaw(),
                         new ParallelAction(
                             arm2.liftDown(),

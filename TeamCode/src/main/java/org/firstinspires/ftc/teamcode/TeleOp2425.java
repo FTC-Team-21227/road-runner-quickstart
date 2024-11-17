@@ -199,9 +199,9 @@ public class TeleOp2425 extends LinearOpMode {
             ARM2.setTargetPosition(10000);
         }
         if (gamepad1.right_bumper) {
-            ARM1.setTargetPosition(ARM1.getCurrentPosition() + 500);
+            ARM1.setTargetPosition(ARM1.getCurrentPosition() + 300);
         } else if (gamepad1.right_trigger > 0.1) {
-            ARM1.setTargetPosition(ARM1.getCurrentPosition() - 500);
+            ARM1.setTargetPosition(ARM1.getCurrentPosition() - 300);
         }
         if (Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) < 15) {
             ARM1.setPower(0);
@@ -213,9 +213,9 @@ public class TeleOp2425 extends LinearOpMode {
             ARM1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         if (gamepad1.left_bumper) {
-            ARM2.setTargetPosition(ARM2.getCurrentPosition() + 500);
+            ARM2.setTargetPosition(ARM2.getCurrentPosition() + 300);
         } else if (gamepad1.left_trigger > 0.1) {
-            ARM2.setTargetPosition(ARM2.getCurrentPosition() - 500);
+            ARM2.setTargetPosition(ARM2.getCurrentPosition() - 300);
         }
         if (ARM2.getCurrentPosition() > 11000 && ARM1.getCurrentPosition() > 6000){
             ARM2.setTargetPosition(10700);
