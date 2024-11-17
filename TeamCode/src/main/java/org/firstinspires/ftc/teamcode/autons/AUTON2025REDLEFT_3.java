@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.autons;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -23,9 +22,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class AUTON2025REDLEFT_3 extends LinearOpMode{
     private Servo Claw;
     private Servo Intake_Angle;
+
+
     public class ARM1 {
         private DcMotorEx arm1;
-
         public ARM1(HardwareMap hardwareMap) {
             arm1 = hardwareMap.get(DcMotorEx.class, "ARM1");
             arm1.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -34,6 +34,8 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             arm1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         }
+
+
         public class LiftBucketUp implements Action {
             private boolean initialized = false;
 
@@ -48,7 +50,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //                packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 8508) {
+                if (pos < 10232) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -59,7 +61,9 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         public Action liftBucketUp() {
             return new AUTON2025REDLEFT_3.ARM1.LiftBucketUp();
         }
-        public class LiftRungUp implements Action {
+
+
+        public class AboveRung implements Action {
             private boolean initialized = false;
 
             @Override
@@ -71,9 +75,9 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
 
                 double pos = arm1.getCurrentPosition();
                 telemetry.addData("liftPos", pos);
-//                packet.put("liftPos", pos);
+//              packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 3140) {
+                if (pos < 2336) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -82,8 +86,10 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             }
         }
         public Action liftRungUp() {
-            return new AUTON2025REDLEFT_3.ARM1.LiftRungUp();
+            return new AUTON2025REDLEFT_3.ARM1.AboveRung();
         }
+
+
         public class LiftWallUp implements Action {
             private boolean initialized = false;
 
@@ -124,7 +130,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
                 //packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos > -100) {
+                if (pos > 470) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -136,12 +142,15 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             return new AUTON2025REDLEFT_3.ARM1.LiftDown();
         }
     }
+
+
     public class CLAW {
         private Servo Claw;
-
         public CLAW(HardwareMap hardwareMap) {
             Claw = hardwareMap.get(Servo.class, "Claw");
+            Claw.scaleRange(0.2, 0.8);
         }
+
 
         public class CloseClaw implements Action {
             @Override
@@ -154,6 +163,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             return new CloseClaw();
         }
 
+
         public class OpenClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
@@ -165,6 +175,8 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             return new OpenClaw();
         }
     }
+
+
     public class ARM2 {
         private DcMotorEx arm2;
 
@@ -177,6 +189,29 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
 
         }
         //public
+
+        public class AboveRung implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm2.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = arm2.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+//              packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos < 4432) {
+                    return true;
+                } else {
+                    arm2.setPower(0);
+                    return false;
+                }
+            }
+        }
 
         public class LiftBucketUp implements Action {
             private boolean initialized = false;
@@ -192,7 +227,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //              packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 6020) {
+                if (pos < 5710) {
                     return true;
                 } else {
                     arm2.setPower(0);
@@ -268,7 +303,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
                 //packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos > 200) {
+                if (pos > 6620) {
                     return true;
                 } else {
                     arm2.setPower(0);
@@ -280,44 +315,66 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             return new AUTON2025REDLEFT_3.ARM2.LiftDown();
         }
     }
+
+
+    public class INTAKE_ANGLE {
+        private Servo Intake_Angle;
+        public INTAKE_ANGLE(HardwareMap hardwareMap) {
+            Intake_Angle = hardwareMap.get(Servo.class, "Claw");
+            Intake_Angle.scaleRange(0.65, 0.98);
+        }
+
+
+        public class Center implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Intake_Angle.setPosition(0.55);
+                return false;
+            }
+        }
+        public Action closeClaw() {
+            return new Center();
+        }
+
+
+        public class OpenClaw implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Intake_Angle.setPosition(1.0);
+                return false;
+            }
+        }
+        public Action openClaw() {
+            return new OpenClaw();
+        }
+    }
+
+
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d initialPose = new Pose2d(0, 72, Math.toRadians(0));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         AUTON2025REDLEFT_3.ARM1 arm1 = new AUTON2025REDLEFT_3.ARM1(hardwareMap);
         AUTON2025REDLEFT_3.ARM2 arm2 = new AUTON2025REDLEFT_3.ARM2(hardwareMap);
-
-        AUTON2025REDLEFT_3.CLAW claw = new AUTON2025REDLEFT_3.CLAW(hardwareMap);
-//        Hook = hardwareMap.get(Servo.class, "Hook");
-//        Claw = hardwareMap.get(Servo.class, "Claw");
-
-        Intake_Angle = hardwareMap.get(Servo.class,"Intake_Angle");
-
+        CLAW claw = new AUTON2025REDLEFT_3.CLAW(hardwareMap);
+        INTAKE_ANGLE intake_angle = new AUTON2025REDLEFT_3.INTAKE_ANGLE(hardwareMap);
         //waitForStart();
         // vision here that outputs position
         int visionOutputPosition = 1;
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .lineToX(30)
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(13, 115))
-                .waitSeconds(2)
-                .turn(Math.toRadians(225))//face basket
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(115, 115))
-                .waitSeconds(2)
-
-                .turn(Math.toRadians(235)) //get second sample
-                .waitSeconds(2)
-                .turn(Math.toRadians(125)) //face basket
-                ;
-//        TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
-
-//        TrajectoryActionBuilder tab3 = drive.actionBuilder(initialPose)
-//                .lineToYSplineHeading(33, Math.toRadians(180))
+                .lineToX(30);
 //                .waitSeconds(2)
-//                .strafeTo(new Vector2d(46, 30))
-//                .waitSeconds(3);
+//                .strafeTo(new Vector2d(13, 115))
+//                .waitSeconds(2)
+//                .turn(Math.toRadians(225))//face basket
+//                .waitSeconds(2)
+//                .strafeTo(new Vector2d(115, 115))
+//                .waitSeconds(2)
+//
+//                .turn(Math.toRadians(235)) //get second sample
+//                .waitSeconds(2)
+//                .turn(Math.toRadians(125)); //face basket
         Action trajectoryActionCloseOut = tab1.fresh()
                 //.strafeTo(new Vector2d(48, 12))
                 .build();
