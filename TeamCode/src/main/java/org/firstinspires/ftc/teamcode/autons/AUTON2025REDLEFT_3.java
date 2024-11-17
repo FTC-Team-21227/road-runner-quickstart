@@ -21,7 +21,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "AUTON2025REDLEFT_3")
 public class AUTON2025REDLEFT_3 extends LinearOpMode{
-    private Servo Hook;
     private Servo Claw;
     private Servo Intake_Angle;
     public class ARM1 {
@@ -166,35 +165,6 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             return new OpenClaw();
         }
     }
-    public class HOOK {
-        private Servo Hook;
-
-        public HOOK(HardwareMap hardwareMap) {
-            Hook = hardwareMap.get(Servo.class, "Hook");
-        }
-
-        public class CloseClaw implements Action {
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                Hook.setPosition(0.55);
-                return false;
-            }
-        }
-        public Action closeClaw() {
-            return new CloseClaw();
-        }
-
-        public class OpenClaw implements Action {
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                Hook.setPosition(1.0);
-                return false;
-            }
-        }
-        public Action openClaw() {
-            return new OpenClaw();
-        }
-    }
     public class ARM2 {
         private DcMotorEx arm2;
 
@@ -318,7 +288,6 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         AUTON2025REDLEFT_3.ARM2 arm2 = new AUTON2025REDLEFT_3.ARM2(hardwareMap);
 
         AUTON2025REDLEFT_3.CLAW claw = new AUTON2025REDLEFT_3.CLAW(hardwareMap);
-        AUTON2025REDLEFT_3.HOOK hook = new AUTON2025REDLEFT_3.HOOK(hardwareMap);
 //        Hook = hardwareMap.get(Servo.class, "Hook");
 //        Claw = hardwareMap.get(Servo.class, "Claw");
 
