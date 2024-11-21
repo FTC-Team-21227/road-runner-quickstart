@@ -37,26 +37,26 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 .strafeTo(new Vector2d(5,72))
                 ;
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(5, 72, 0))
+                .waitSeconds(1)
                 .strafeTo(new Vector2d(5, 117))
                 .strafeTo(new Vector2d(15,117));
-                //.lineToX(5);
         TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(15, 117, 0))
-                .turn(Math.toRadians(135)) //face basket
+                .turnTo(Math.toRadians(135)) //face basket
                 .strafeTo(new Vector2d(5, 125));
         ;
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(5, 125, Math.toRadians(135)))
-                .turn(Math.toRadians(0))//get second sample
+                .turnTo(Math.toRadians(0))//get second sample
                 .strafeTo(new Vector2d(15,125));
         ;
         TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(15, 125, Math.toRadians(0)))
-                .turn(Math.toRadians(135)) //face basket
+                .turnTo(Math.toRadians(135)) //face basket
                 .strafeTo(new Vector2d(5, 125));
         ;
         TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(15,125,Math.toRadians(135)))
-                .turn(Math.toRadians(20))//get third sample
+                .turnTo(Math.toRadians(20))//get third sample
                 .strafeTo(new Vector2d(20,125));                ;
         TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(20,125,Math.toRadians(125)))
-                .turn(Math.toRadians(135)) //face basket
+                .turnTo(Math.toRadians(135)) //face basket
                 .strafeTo(new Vector2d(5, 125));
                 ;
         TrajectoryActionBuilder tab9 = drive.actionBuilder(new Pose2d(5,125,Math.toRadians(135)))//face basket
