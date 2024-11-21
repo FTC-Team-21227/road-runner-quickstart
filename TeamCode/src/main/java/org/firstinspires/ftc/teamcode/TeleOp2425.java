@@ -220,10 +220,18 @@ public class TeleOp2425 extends LinearOpMode {
         W_FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         W_BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         W_BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ARM1.setDirection(DcMotor.Direction.REVERSE);
+        double a = getRuntime();
+        ARM1.setPower(0.5);
+        while (getRuntime()-a < 1){}
+        ARM1.setPower(0);
+        ARM2.setDirection(DcMotor.Direction.REVERSE);
+        a = getRuntime();
+        ARM2.setPower(0.5);
+        while (getRuntime()-a < 1){}
+        ARM2.setPower(0);
         Intake_Angle.scaleRange(0.65, 0.98);
         Intake_Angle.setPosition(1);
-        ARM1.setDirection(DcMotor.Direction.REVERSE);
-        ARM2.setDirection(DcMotor.Direction.REVERSE);
         while (ARM1Sensor.isPressed()) {
             ARM1.setPower(-0.2);
             telemetry.addData("arm1:",ARM1Sensor.isPressed());

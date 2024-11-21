@@ -115,12 +115,12 @@ public class ARM2 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm2.setPower(-0.8);
+                arm2.setPower(-0.2);
                 initialized = true;
             }
 
             double pos = arm2.getCurrentPosition();
-            if (pos < 6600) {
+            if (pos > 6593) {
                 return true;
             } else {
                 arm2.setPower(0);

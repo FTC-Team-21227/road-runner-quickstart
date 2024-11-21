@@ -53,7 +53,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos < 10232) {
+            if (pos < 12490) {
                 return true;
             } else {
                 arm1.setPower(0);

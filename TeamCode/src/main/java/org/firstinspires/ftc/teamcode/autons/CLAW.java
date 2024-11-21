@@ -11,12 +11,13 @@ public class CLAW {
     private Servo Claw;
     public CLAW(HardwareMap hardwareMap) {
         Claw = hardwareMap.get(Servo.class, "Claw");
+        Claw.scaleRange(0.2,0.8);
     }
 
     public class CloseClaw implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            Claw.setPosition(0.8);
+            Claw.setPosition(1);
             return false;
         }
     }
@@ -27,7 +28,7 @@ public class CLAW {
     public class OpenClaw implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            Claw.setPosition(0.2);
+            Claw.setPosition(0);
             return false;
         }
     }

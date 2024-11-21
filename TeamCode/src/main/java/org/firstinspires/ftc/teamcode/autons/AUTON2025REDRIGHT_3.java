@@ -31,15 +31,15 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
                 ;
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(5, 60, 0))
                 .strafeTo(new Vector2d(0, 30))
-                .strafeTo(new Vector2d(40,30))
-                .strafeTo(new Vector2d(40, 20))
+                .strafeTo(new Vector2d(45,30))
+                .strafeTo(new Vector2d(45, 20))
                 .strafeTo(new Vector2d(5,20))
-                .strafeTo(new Vector2d(40,20))
-                .strafeTo(new Vector2d(40,15))
+                .strafeTo(new Vector2d(45,20))
+                .strafeTo(new Vector2d(45,15))
                 .strafeTo(new Vector2d(5,15))
-                .strafeTo(new Vector2d(40,15))
-                .strafeTo(new Vector2d(40,5))
-                .strafeTo(new Vector2d(0,5));
+                .strafeTo(new Vector2d(45,15))
+                .strafeTo(new Vector2d(45,7))
+                .strafeTo(new Vector2d(5,7));
 
 
         claw.closeClaw();
