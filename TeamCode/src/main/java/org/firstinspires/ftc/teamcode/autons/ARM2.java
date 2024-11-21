@@ -28,7 +28,7 @@ public class ARM2 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm2.setPower(0.8);
+                arm2.setPower(1);
                 initialized = true;
             }
 
@@ -50,7 +50,7 @@ public class ARM2 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm2.setPower(0.8);
+                arm2.setPower(1);
                 initialized = true;
             }
 
@@ -72,7 +72,7 @@ public class ARM2 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm2.setPower(0.8);
+                arm2.setPower(1);
                 initialized = true;
             }
 
@@ -94,7 +94,7 @@ public class ARM2 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm2.setPower(0.8);
+                arm2.setPower(1);
                 initialized = true;
             }
 
@@ -138,7 +138,7 @@ public class ARM2 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm2.setPower(-0.8);
+                arm2.setPower(-1);
                 initialized = true;
             }
             double pos = arm2.getCurrentPosition();

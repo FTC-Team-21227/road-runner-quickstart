@@ -26,7 +26,7 @@ public class ARM1 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm1.setPower(-0.8);
+                arm1.setPower(-1);
                 initialized = true;
             }
 
@@ -48,12 +48,12 @@ public class ARM1 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm1.setPower(0.8);
+                arm1.setPower(1);
                 initialized = true;
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos < 12490) {
+            if (pos < 11700) {
                 return true;
             } else {
                 arm1.setPower(0);
@@ -70,7 +70,7 @@ public class ARM1 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm1.setPower(0.8);
+                arm1.setPower(1);
                 initialized = true;
             }
 
@@ -92,7 +92,7 @@ public class ARM1 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm1.setPower(0.8);
+                arm1.setPower(1);
                 initialized = true;
             }
 
@@ -115,7 +115,7 @@ public class ARM1 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm1.setPower(-0.8);
+                arm1.setPower(-1);
                 initialized = true;
             }
 
@@ -135,7 +135,7 @@ public class ARM1 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                arm1.setPower(-0.8);
+                arm1.setPower(-1);
                 initialized = true;
             }
 
