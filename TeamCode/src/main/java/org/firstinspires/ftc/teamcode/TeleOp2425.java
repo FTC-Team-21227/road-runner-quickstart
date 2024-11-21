@@ -151,7 +151,7 @@ public class TeleOp2425 extends LinearOpMode {
             ARM2.setTargetPosition(6000);
             liftManualControl = false;
         }
-        if (gamepad2.right_trigger > 0.1 && gamepad2.left_trigger > 0.1) {
+        if (gamepad2.left_trigger > 0.1) {
             while (ARM1Sensor.isPressed()) {
                 ARM1.setPower(-0.2);
             }
@@ -168,6 +168,14 @@ public class TeleOp2425 extends LinearOpMode {
             ARM1.setTargetPosition(ARM1.getCurrentPosition() - 250);
             liftManualControl = true;
         }
+        //SOFTWARE LIMITSSSS:
+        if (ARM1.getCurrentPosition()>15000){
+            ARM1.setTargetPosition(15000);
+        }
+//        else if (ARM1.getCurrentPosition()+ARM2.getCurrentPosition()>8000){
+//            ARM2.setTargetPosition(ARM2.getCurrentPosition());
+//        }
+        ////
         if (Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) < 15) {
             ARM1.setPower(0);
         } else {
@@ -254,7 +262,7 @@ public class TeleOp2425 extends LinearOpMode {
         Claw.scaleRange(0.2,0.8);
 
 
-        Motor_Power = 0.4;
+        Motor_Power = 0.6;
         Targeting_Angle = 0;
         Lift_Power = 0.3;
         // Initialize the IMU with non-default settings. To use this block,

@@ -40,7 +40,20 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
                 .strafeTo(new Vector2d(45,15))
                 .strafeTo(new Vector2d(45,7))
                 .strafeTo(new Vector2d(5,7));
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(5, 7, 0))
+                .strafeTo(new Vector2d(5,30))
+                .turnTo(Math.toRadians(-90));
+        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(5, 30, -90))
+                .strafeTo(new Vector2d(5,25));
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(5, 25, -90))
+                .turnTo(Math.toRadians(0))
+                .strafeTo(new Vector2d(5,60));
 
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(10, 60, 0))
+                .strafeTo(new Vector2d(10,60));
+        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(5, 60, 0))
+                .strafeTo(new Vector2d(5,60))
+                .strafeTo(new Vector2d(0, 10));
 
         claw.closeClaw();
         intake_angle.RotatePosition0();
@@ -50,6 +63,13 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
         Action firstTrajectory = tab1.build();
         Action secondTrajectory = tab2.build();
         Action thirdTrajectory = tab3.build();
+        Action fourthTrajectory = tab4.build();
+        Action fifthTrajectory = tab5.build();
+        Action sixthTrajectory = tab6.build();
+        Action seventhTrajectory = tab7.build();
+        Action eighthTrajectory = tab8.build();
+
+
 
         Actions.runBlocking(
                 new SequentialAction(
@@ -68,6 +88,25 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
                                 arm1.liftDown(),
                                 arm2.liftDown(),
                                 thirdTrajectory
+                        ),
+                        fourthTrajectory,
+                        new ParallelAction(
+                            arm1.liftWallUp(),
+                            arm2.liftWallUp()
+                        ),
+                        fifthTrajectory,
+                        claw.closeClaw(),
+                        new ParallelAction(
+                            arm1.liftRungUp(),
+                            arm2.liftRungUp(),
+                            sixthTrajectory
+                        ),
+                        seventhTrajectory,
+                        arm1.hookSpecimen(),
+                        new ParallelAction(
+                            eighthTrajectory,
+                            arm1.liftDown(),
+                            arm2.liftDown()
                         )
                 )
         );
