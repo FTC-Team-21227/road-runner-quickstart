@@ -38,8 +38,8 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
                 .strafeTo(new Vector2d(45,15))
                 .strafeTo(new Vector2d(5,15))
                 .strafeTo(new Vector2d(45,15))
-                .strafeTo(new Vector2d(45,7))
-                .strafeTo(new Vector2d(5,7));
+                .strafeTo(new Vector2d(45,4))
+                .strafeTo(new Vector2d(5,4));
         TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(5, 7, 0))
                 .strafeTo(new Vector2d(5,30))
                 .turnTo(Math.toRadians(-90));
