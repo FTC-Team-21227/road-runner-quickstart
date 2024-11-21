@@ -109,40 +109,49 @@ public class TeleOp2425 extends LinearOpMode {
     }
 
     private void ARM_Control() {
-        if (gamepad1.left_bumper){
-            Intake_Angle.setPosition(0);
+        if (gamepad1.left_bumper) {
+            Intake_Angle.setPosition(0); //forward
         }
-        if (gamepad1.left_trigger > 0.1){
-            Intake_Angle.setPosition(1);
+        if (gamepad1.left_trigger > 0.1) {
+            Intake_Angle.setPosition(1); //right
         }
-        if (gamepad1.right_bumper){
-            Claw.setPosition(0);
+        if (gamepad1.right_bumper) {
+            Claw.setPosition(0); //close
         }
-        if (gamepad1.right_trigger > 0.1){
-            Claw.setPosition(1);
+        if (gamepad1.right_trigger > 0.1) {
+            Claw.setPosition(1); //open
         }
-        if (gamepad2.right_trigger > 0.1){
+        if (gamepad2.right_trigger > 0.1) {
             Hook.setPower(0.5);
             sleep(1000);
             Hook.setPower(0);
         }
         if (gamepad1.x) {//high rung
-            ARM1.setTargetPosition(2336);
-            ARM2.setTargetPosition(4432);
+            ARM1.setTargetPosition(5048);
+            ARM2.setTargetPosition(6299);
+            liftManualControl = false;
         }
-        if (gamepad1.y){//high bucket
-            ARM1.setTargetPosition(10232);
-            ARM2.setTargetPosition(7510);
+        if (gamepad1.y) {//high bucket
+            ARM1.setTargetPosition(12490);
+            ARM2.setTargetPosition(7503);
+            liftManualControl = false;
         }
-        if (gamepad1.a){//floor
+        if (gamepad1.a) {//floor
+            ARM1.setTargetPosition(978);
+            ARM2.setTargetPosition(6593);
+            liftManualControl = false;
+        }
+        if (gamepad1.b) {//wall
+            ARM1.setTargetPosition(2480);
+            ARM2.setTargetPosition(6300);
+            liftManualControl = false;
+        }
+        if (gamepad1.start){ //into submersible
             ARM1.setTargetPosition(470);
-            ARM2.setTargetPosition(7200);
+            ARM2.setTargetPosition(6000);
+            liftManualControl = false;
         }
-//        if (gamepad1.b){//wall
-//            ARM1.setTargetPosition(0);
-//            ARM2.setTargetPosition(10000);
-//        }
-        if (gamepad2.right_trigger > 0.1 && gamepad2.left_trigger > 0.1) {
+        if (gamepad2.left_trigger > 0.1) {
             while (ARM1Sensor.isPressed()) {
                 ARM1.setPower(-0.2);
             }
@@ -152,11 +161,21 @@ public class TeleOp2425 extends LinearOpMode {
             }
             ARM2.setPower(0);
         }
-        if (gamepad1.dpad_up) {
+        if (gamepad1.right_stick_y<-0.2) {
             ARM1.setTargetPosition(ARM1.getCurrentPosition() + 250);
-        } else if (gamepad1.dpad_down) {
+            liftManualControl = true;
+        } else if (gamepad1.right_stick_y>0.2) {
             ARM1.setTargetPosition(ARM1.getCurrentPosition() - 250);
+            liftManualControl = true;
         }
+        //SOFTWARE LIMITSSSS:
+        if (ARM1.getCurrentPosition()>15000){
+            ARM1.setTargetPosition(15000);
+        }
+//        else if (ARM1.getCurrentPosition()+ARM2.getCurrentPosition()>8000){
+//            ARM2.setTargetPosition(ARM2.getCurrentPosition());
+//        }
+        ////
         if (Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) < 15) {
             ARM1.setPower(0);
         } else {
@@ -166,10 +185,12 @@ public class TeleOp2425 extends LinearOpMode {
                 ARM1.setPower(Math.abs(ARM1.getCurrentPosition() - ARM1.getTargetPosition()) * -0.01);
             ARM1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
-        if (gamepad1.dpad_right) {
+        if (gamepad1.dpad_up) {
             ARM2.setTargetPosition(ARM2.getCurrentPosition() + 250);
-        } else if (gamepad1.dpad_left) {
+            liftManualControl = true;
+        } else if (gamepad1.dpad_down) {
             ARM2.setTargetPosition(ARM2.getCurrentPosition() - 250);
+            liftManualControl = true;
         }
 //        if (ARM2.getCurrentPosition() > 11000 && ARM1.getCurrentPosition() > 6000){
 //            ARM2.setTargetPosition(10700);
@@ -178,9 +199,9 @@ public class TeleOp2425 extends LinearOpMode {
             ARM2.setPower(0);
         } else {
             if (ARM2.getCurrentPosition() < ARM2.getTargetPosition())
-                ARM2.setPower(Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) * 0.001);
+                ARM2.setPower(Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) * 0.002);
             else
-                ARM2.setPower(Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) * -0.001);
+                ARM2.setPower(Math.abs(ARM2.getCurrentPosition() - ARM2.getTargetPosition()) * -0.002);
             ARM2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
@@ -207,17 +228,25 @@ public class TeleOp2425 extends LinearOpMode {
         W_FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         W_BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         W_BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ARM1.setDirection(DcMotor.Direction.REVERSE);
+        double a = getRuntime();
+        ARM1.setPower(0.5);
+        while (getRuntime()-a < 1){}
+        ARM1.setPower(0);
+        ARM2.setDirection(DcMotor.Direction.REVERSE);
+        a = getRuntime();
+        ARM2.setPower(0.5);
+        while (getRuntime()-a < 1){}
+        ARM2.setPower(0);
         Intake_Angle.scaleRange(0.65, 0.98);
         Intake_Angle.setPosition(1);
-        ARM1.setDirection(DcMotor.Direction.REVERSE);
-        ARM2.setDirection(DcMotor.Direction.REVERSE);
         while (ARM1Sensor.isPressed()) {
-            ARM1.setPower(-0.5);
+            ARM1.setPower(-0.2);
             telemetry.addData("arm1:",ARM1Sensor.isPressed());
             telemetry.update();
         }
         while (ARM2Sensor.isPressed()) {
-            ARM2.setPower(-0.5);
+            ARM2.setPower(-0.2);
             telemetry.addData("arm2:",ARM2Sensor.isPressed());
             telemetry.update();
         }
@@ -233,7 +262,7 @@ public class TeleOp2425 extends LinearOpMode {
         Claw.scaleRange(0.2,0.8);
 
 
-        Motor_Power = 0.4;
+        Motor_Power = 0.6;
         Targeting_Angle = 0;
         Lift_Power = 0.3;
         // Initialize the IMU with non-default settings. To use this block,
