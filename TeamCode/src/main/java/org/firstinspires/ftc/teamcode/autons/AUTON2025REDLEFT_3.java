@@ -32,6 +32,62 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
             arm1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         }
+
+        public class LiftFloorUp implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm1.setPower(-0.8);
+                    initialized = true;
+                }
+
+                double pos = arm1.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+//                packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos < 470) {
+                    return true;
+                } else {
+                    arm1.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftFloorUp() {
+            return new AUTON2025REDLEFT_3.ARM1.LiftFloorUp();
+        }
+
+
+
+        public class LiftRungDown implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm1.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = arm1.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+//                packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos < 2336) {
+                    return true;
+                } else {
+                    arm1.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftRungDown() {
+            return new AUTON2025REDLEFT_3.ARM1.LiftRungDown();
+        }
+
+
         public class LiftBucketUp implements Action {
             private boolean initialized = false;
 
@@ -71,7 +127,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //                packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 2336) {
+                if (pos < 3953) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -96,7 +152,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //                packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 3140) {
+                if (pos < 3540) {
                     return true;
                 } else {
                     arm1.setPower(0);
@@ -144,7 +200,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         public class CloseClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                Claw.setPosition(0.2);
+                Claw.setPosition(0.8);
                 return false;
             }
         }
@@ -155,7 +211,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         public class OpenClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                Claw.setPosition(0.8);
+                Claw.setPosition(0.2);
                 return false;
             }
         }
@@ -205,6 +261,34 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         }
         //public
 
+
+        public class LiftRungDown implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    arm2.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = arm2.getCurrentPosition();
+                telemetry.addData("liftPos", pos);
+//                packet.put("liftPos", pos);
+                telemetry.update();
+                if (pos < 4700) {
+                    return true;
+                } else {
+                    arm2.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action liftRungDown() {
+            return new AUTON2025REDLEFT_3.ARM2.LiftRungDown();
+        }
+
+
         public class LiftBucketUp implements Action {
             private boolean initialized = false;
 
@@ -244,7 +328,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //              packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 4432) {
+                if (pos < 5158) {
                     return true;
                 } else {
                     arm2.setPower(0);
@@ -269,7 +353,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                 telemetry.addData("liftPos", pos);
 //                packet.put("liftPos", pos);
                 telemetry.update();
-                if (pos < 3140) {
+                if (pos < 7020) {
                     return true;
                 } else {
                     arm2.setPower(0);
@@ -348,29 +432,26 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         // vision here that outputs position
         int visionOutputPosition = 1;
 
-        TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .lineToX(30)
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(13, 115))
-                .waitSeconds(2)
-                .turn(Math.toRadians(225))//face basket
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(115, 115))
-                .waitSeconds(2)
-
-                .turn(Math.toRadians(235)) //get second sample
-                .waitSeconds(2)
-                .turn(Math.toRadians(125)) //face basket
-                ;
-//        TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
-
-//        TrajectoryActionBuilder tab3 = drive.actionBuilder(initialPose)
-//                .lineToYSplineHeading(33, Math.toRadians(180))
+        TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)//go forward
+                .lineToX(13);
 //                .waitSeconds(2)
-//                .strafeTo(new Vector2d(46, 30))
-//                .waitSeconds(3);
+//                .strafeTo(new Vector2d(13, 115))
+//                .waitSeconds(2)
+//                .turn(Math.toRadians(225))//face basket
+//                .waitSeconds(2)
+//                .strafeTo(new Vector2d(115, 115))
+//                .waitSeconds(2)
+//
+//                .turn(Math.toRadians(235)) //get second sample
+//                .waitSeconds(2)
+//                .turn(Math.toRadians(125)); //face basket
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(10, 72, Math.toRadians(0))) //back up to hang specimen
+                .lineToX(5);
+
+        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(5, 72, Math.toRadians(0)))
+                .strafeTo(new Vector2d(13, 115));
+
         Action trajectoryActionCloseOut = tab1.fresh()
-                //.strafeTo(new Vector2d(48, 12))
                 .build();
 
         // actions that need to happen on init; for instance, a claw tightening.
@@ -393,8 +474,12 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         //if (isStopRequested()) return;
 
         Action firstTrajectory;
+        Action secondTrajectory;
+        Action thirdTrajectory;
         //if (startPosition == 1) {
         firstTrajectory = tab1.build();
+        secondTrajectory = tab2.build();
+        thirdTrajectory = tab3.build();
         //}
 //        } else if (startPosition == 2) {
 //            firstTrajectory = tab2.build();
@@ -404,12 +489,24 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
 
         Actions.runBlocking(
                 new SequentialAction(
+                        claw.closeClaw(),
                         new ParallelAction(
+                                intake_angle.RotatePosition0(),
                                 arm1.liftRungUp(),
                                 arm2.liftRungUp(),
                                 firstTrajectory
                         ),
-//                        claw.openClaw(),
+                        new ParallelAction(
+                                arm1.liftRungDown(),
+                                arm2.liftRungDown(),
+                                secondTrajectory
+                        ),
+                        claw.openClaw(),
+                        new ParallelAction(
+                                arm1.liftFloorUp(),
+                                arm2.liftFloorUp(),
+                                thirdTrajectory
+                        ),
                         new ParallelAction(
                             arm2.liftDown(),
                             arm1.liftDown()
