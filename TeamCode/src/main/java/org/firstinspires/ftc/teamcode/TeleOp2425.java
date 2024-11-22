@@ -51,6 +51,7 @@ public class TeleOp2425 extends LinearOpMode {
     boolean liftManualControl = true;
     double x = 0;
     double y = 0;
+    double tim;
 
     /**
      * This function is executed when this Op Mode is selected from the Driver Station.
@@ -121,46 +122,60 @@ public class TeleOp2425 extends LinearOpMode {
         if (gamepad1.right_trigger > 0.1) {
             Claw.setPosition(1); //open
         }
-        if (gamepad2.right_trigger > 0.1) {
+        if (gamepad2.right_bumper) { //hold down..
+            tim = getRuntime();
             Hook.setPower(0.5);
-            sleep(1000);
+        }
+        if (gamepad2.left_bumper) {
+            tim = getRuntime();
+            Hook.setPower(-0.5);
+        }
+        if (getRuntime() > tim+1)
             Hook.setPower(0);
+        if (gamepad2.a){
+            ARM1.setTargetPosition(12639);
+            ARM2.setTargetPosition(7976);
+        }
+        if (gamepad2.b){
+            ARM1.setTargetPosition(-712);
+            Intake_Angle.setPosition(1);
+            Claw.setPosition(1);
         }
         if (gamepad1.x) {//high rung
-            ARM1.setTargetPosition(5048);
-            ARM2.setTargetPosition(6299);
+            ARM1.setTargetPosition(4258);
+            ARM2.setTargetPosition(6308);
             liftManualControl = false;
         }
         if (gamepad1.y) {//high bucket
-            ARM1.setTargetPosition(12490);
-            ARM2.setTargetPosition(7503);
+            ARM1.setTargetPosition(10913);
+            ARM2.setTargetPosition(7508);
             liftManualControl = false;
         }
         if (gamepad1.a) {//floor
-            ARM1.setTargetPosition(978);
-            ARM2.setTargetPosition(6593);
+            ARM1.setTargetPosition(0);
+            ARM2.setTargetPosition(6581);
             liftManualControl = false;
         }
         if (gamepad1.b) {//wall
-            ARM1.setTargetPosition(2480);
-            ARM2.setTargetPosition(6300);
+            ARM1.setTargetPosition(1351);
+            ARM2.setTargetPosition(6293);
             liftManualControl = false;
         }
         if (gamepad1.start){ //into submersible
-            ARM1.setTargetPosition(470);
-            ARM2.setTargetPosition(6000);
+            ARM1.setTargetPosition(542);
+            ARM2.setTargetPosition(6436);
             liftManualControl = false;
         }
-        if (gamepad2.left_trigger > 0.1) {
-            while (ARM1Sensor.isPressed()) {
-                ARM1.setPower(-0.2);
-            }
-            ARM1.setPower(0);
-            while (ARM2Sensor.isPressed()) {
-                ARM2.setPower(-0.2);
-            }
-            ARM2.setPower(0);
-        }
+//        if (gamepad2.left_trigger > 0.3 || gamepad2.right_trigger > 0.3) {
+//            while (ARM1Sensor.isPressed()) {
+//                ARM1.setPower(-0.2);
+//            }
+//            ARM1.setPower(0);
+//            while (ARM2Sensor.isPressed()) {
+//                ARM2.setPower(-0.2);
+//            }
+//            ARM2.setPower(0);
+//        }
         if (gamepad1.right_stick_y<-0.2) {
             ARM1.setTargetPosition(ARM1.getCurrentPosition() + 250);
             liftManualControl = true;
@@ -245,11 +260,13 @@ public class TeleOp2425 extends LinearOpMode {
             telemetry.addData("arm1:",ARM1Sensor.isPressed());
             telemetry.update();
         }
+        ARM1.setPower(0);
         while (ARM2Sensor.isPressed()) {
             ARM2.setPower(-0.2);
             telemetry.addData("arm2:",ARM2Sensor.isPressed());
             telemetry.update();
         }
+        ARM2.setPower(0);
         ARM2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         ARM2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         ARM2.setTargetPosition(0);

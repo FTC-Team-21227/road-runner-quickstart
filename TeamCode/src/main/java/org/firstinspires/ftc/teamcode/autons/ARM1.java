@@ -53,7 +53,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos < 11700) {
+            if (pos < 10413) {
                 return true;
             } else {
                 arm1.setPower(0);
@@ -75,7 +75,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos < 5909) {
+            if (pos < 4258) {
                 return true;
             } else {
                 arm1.setPower(0);
@@ -97,7 +97,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos < 3640) {
+            if (pos < 1351) {
                 return true;
             } else {
                 arm1.setPower(0);
@@ -143,7 +143,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos > 778) {
+            if (pos > 0) {
                 return true;
             } else {
                 arm1.setPower(0);

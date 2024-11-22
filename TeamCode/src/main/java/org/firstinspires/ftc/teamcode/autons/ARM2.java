@@ -33,7 +33,7 @@ public class ARM2 {
             }
 
             double pos = arm2.getCurrentPosition();
-            if (pos < 7510) {
+            if (pos < 7508) {
                 return true;
             } else {
                 arm2.setPower(0);
@@ -55,7 +55,7 @@ public class ARM2 {
             }
 
             double pos = arm2.getCurrentPosition();
-            if (pos < 6857) {
+            if (pos < 6293) {
                 return true;
             } else {
                 arm2.setPower(0);
@@ -102,7 +102,7 @@ public class ARM2 {
             }
 
             double pos = arm2.getCurrentPosition();
-            if (pos < 3140) {
+            if (pos < 6293) {
                 return true;
             } else {
                 arm2.setPower(0);
@@ -113,9 +113,30 @@ public class ARM2 {
     public Action liftWallUp() {
         return new LiftWallUp();
     }
-    public class HookSpecimen implements Action {
+//    public class HookSpecimen implements Action {
+//        private boolean initialized = false;
+//
+//        @Override
+//        public boolean run(@NonNull TelemetryPacket packet) {
+//            if (!initialized) {
+//                arm2.setPower(1);
+//                initialized = true;
+//            }
+//
+//            double pos = arm2.getCurrentPosition();
+//            if (pos < 6732) {
+//                return true;
+//            } else {
+//                arm2.setPower(0);
+//                return false;
+//            }
+//        }
+//    }
+//    public Action hookSpecimen() {
+//        return new HookSpecimen();
+//    }
+    public class LiftFloorUp implements Action {
         private boolean initialized = false;
-
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
@@ -124,28 +145,7 @@ public class ARM2 {
             }
 
             double pos = arm2.getCurrentPosition();
-            if (pos < 6732) {
-                return true;
-            } else {
-                arm2.setPower(0);
-                return false;
-            }
-        }
-    }
-    public Action hookSpecimen() {
-        return new HookSpecimen();
-    }
-    public class LiftFloorUp implements Action {
-        private boolean initialized = false;
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-            if (!initialized) {
-                arm2.setPower(-1);
-                initialized = true;
-            }
-
-            double pos = arm2.getCurrentPosition();
-            if (pos > 6593) {
+            if (pos < 6481) {
                 return true;
             } else {
                 arm2.setPower(0);
@@ -155,6 +155,27 @@ public class ARM2 {
     }
     public Action liftFloorUp(){
         return new LiftFloorUp();
+    }
+    public class LiftFloorDown implements Action {
+        private boolean initialized = false;
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                arm2.setPower(-1);
+                initialized = true;
+            }
+
+            double pos = arm2.getCurrentPosition();
+            if (pos > 6481) {
+                return true;
+            } else {
+                arm2.setPower(0);
+                return false;
+            }
+        }
+    }
+    public Action LiftFloorDown(){
+        return new LiftFloorDown();
     }
 
     public class LiftDown implements Action {
