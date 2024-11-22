@@ -31,34 +31,33 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         INTAKE_ANGLE intake_angle = new INTAKE_ANGLE(hardwareMap);
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .lineToX(10)
-                .waitSeconds(1);
+                .lineToX(10);
         TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(10, 72, 0))
-                .strafeTo(new Vector2d(5,72))
-                ;
+                .strafeTo(new Vector2d(5,72));
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(5, 72, 0))
-                .waitSeconds(1)
-                .strafeTo(new Vector2d(14, 117))
-                .strafeTo(new Vector2d(17, 117));
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(17, 117, 0))
-                .turnTo(-Math.toRadians(220)) //face basket
-                .strafeTo(new Vector2d(-2, 125));
-        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-2, 125, -Math.toRadians(220)))
+                .strafeTo(new Vector2d(10, 116.5))
+                .strafeTo(new Vector2d(12, 116.5))//first sample
+                .waitSeconds(0.1);
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(12, 116.5, 0))
+                .waitSeconds(2.75)
+                .turnTo(Math.toRadians(140)) //face basket
+                .strafeTo(new Vector2d(-3, 122));
+        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-3, 122, Math.toRadians(140)))
                 .turnTo(Math.toRadians(0))//get second sample
-                .strafeTo(new Vector2d(6,127));
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(6, 127, Math.toRadians(0)))
-                .turnTo(-Math.toRadians(220)) //face basket
-                .strafeTo(new Vector2d(-2, 125));
-        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-2,125,-Math.toRadians(220)))
+                .strafeTo(new Vector2d(6,125.5));
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(6, 125.5, Math.toRadians(0)))
+                .waitSeconds(2.8)
+                .turnTo(Math.toRadians(145)) //face basket
+                .strafeTo(new Vector2d(-3, 122));
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-3,122, Math.toRadians(145)))
                 .turnTo(Math.toRadians(20))//get third sample
-                .strafeTo(new Vector2d(6,125));                ;
-        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(6,125,Math.toRadians(125)))
-                .turnTo(-Math.toRadians(220)) //face basket
-                .strafeTo(new Vector2d(-2, 125));
-        TrajectoryActionBuilder tab9 = drive.actionBuilder(new Pose2d(-2,125,-Math.toRadians(220)))//face basket
-                .strafeTo(new Vector2d(10, 120))
-                .waitSeconds(2)
-                .strafeTo(new Vector2d(5,125));
+                .strafeTo(new Vector2d(7,126.5));
+        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(7,126.5,Math.toRadians(20)))
+                .strafeTo(new Vector2d(9, 103))
+                .turnTo(Math.toRadians(135)); //face basket, low basket
+//        TrajectoryActionBuilder tab9 = drive.actionBuilder(new Pose2d(-4,122,Math.toRadians(140)))
+//                .strafeTo(new Vector2d(10, 120))
+//                .strafeTo(new Vector2d(5,125));
 
         claw.closeClaw();
         intake_angle.RotatePosition0();
@@ -73,7 +72,6 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
         Action sixthTrajectory = tab6.build();
         Action seventhTrajectory = tab7.build();
         Action eighthTrajectory = tab8.build();
-        Action ninthTrajectory = tab9.build();
 
         Actions.runBlocking(
                 new SequentialAction(
@@ -85,7 +83,6 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                                 firstTrajectory
                         ),
                         arm1.hookSpecimen(),
-                        //arm2.hookSpecimen(),
                         secondTrajectory,
                         claw.openClaw(),
                         new ParallelAction(
@@ -96,9 +93,9 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                         claw.closeClaw(),
                         new ParallelAction(
                             arm1.liftBucketUp(),
-                            arm2.liftBucketUp()
+                            arm2.liftBucketUp(),
+                                fourthTrajectory
                         ),
-                        fourthTrajectory,
                         claw.openClaw(),
                         new ParallelAction(
                                 fifthTrajectory,
@@ -108,9 +105,9 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                         claw.closeClaw(),
                         new ParallelAction(
                                 arm1.liftBucketUp(),
-                                arm2.liftBucketUp()
+                                arm2.liftBucketUp(),
+                                sixthTrajectory
                         ),
-                        sixthTrajectory,
                         claw.openClaw(),
                         new ParallelAction(
                                 arm1.LiftFloorDown(),
@@ -119,16 +116,11 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                         ),
                         claw.closeClaw(),
                         new ParallelAction(
-                                arm1.liftBucketUp(),
-                                arm2.liftBucketUp()
+                                arm1.liftLowBasketUp(),
+                                arm2.liftLowBasketUp(),
+                                eighthTrajectory
                         ),
-                        eighthTrajectory,
-                        claw.openClaw(),
-                        new ParallelAction(
-                            ninthTrajectory,
-                            arm2.liftDown(),
-                            arm1.liftDown()
-                        )
+                        claw.openClaw()
                         //         trajectoryActionCloseOut
                 )
         );

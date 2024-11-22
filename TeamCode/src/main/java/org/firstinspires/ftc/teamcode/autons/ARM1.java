@@ -109,6 +109,29 @@ public class ARM1 {
         return new LiftWallUp();
     }
 
+
+    public class LiftLowBasketUp implements Action {
+        private boolean initialized = false;
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                arm1.setPower(1);
+                initialized = true;
+            }
+
+            double pos = arm1.getCurrentPosition();
+            if (pos < 6400) {
+                return true;
+            } else {
+                arm1.setPower(0);
+                return false;
+            }
+        }
+    }
+    public Action liftLowBasketUp() {return new LiftLowBasketUp();}
+
+
     public class LiftFloorDown implements Action {
         private boolean initialized = false;
 
@@ -120,7 +143,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos > 978) {
+            if (pos > 778) {
                 return true;
             } else {
                 arm1.setPower(0);
