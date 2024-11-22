@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "ArmServoPresets")
+//@TeleOp(name = "ArmServoPresets")
 public class ArmServoPresets extends LinearOpMode {
 
     private DcMotor W_BL;

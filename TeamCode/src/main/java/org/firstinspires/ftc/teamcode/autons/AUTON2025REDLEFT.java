@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "AUTON2025REDLEFT")
+//@Autonomous(name = "AUTON2025REDLEFT")
 public class AUTON2025REDLEFT extends LinearOpMode {
     public class ARM1 {
         private DcMotorEx arm1;

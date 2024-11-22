@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "FtcTeleOp2023")
+//@TeleOp(name = "FtcTeleOp2023")
 public class FtcTeleOp2023 extends LinearOpMode {
 
     private DcMotor W_FR;

@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous(name = "movementTesting")
+//@Autonomous(name = "movementTesting")
 public class movementTesting extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

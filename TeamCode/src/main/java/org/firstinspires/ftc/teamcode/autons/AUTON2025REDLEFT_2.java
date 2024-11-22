@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "AUTON2025REDLEFT_2")
+//@Autonomous(name = "AUTON2025REDLEFT_2")
 public class AUTON2025REDLEFT_2 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
