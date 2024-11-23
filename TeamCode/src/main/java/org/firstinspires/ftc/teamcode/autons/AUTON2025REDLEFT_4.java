@@ -28,24 +28,29 @@ public class AUTON2025REDLEFT_4 extends LinearOpMode{
         TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(10, 72, 0))
                 .strafeTo(new Vector2d(5,72));
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(5, 72, 0))
-                .strafeTo(new Vector2d(8, 115.5))
-                .strafeTo(new Vector2d(12, 115.5))//first sample
-                .waitSeconds(0.1);
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(12, 115.5, 0))
+                .strafeTo(new Vector2d(8, 114.5))
+                .strafeTo(new Vector2d(10.5, 114.5));//first sample
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10.5, 114.5, 0))
                 .waitSeconds(2.75)
                 .turnTo(Math.toRadians(140)) //face basket
                 .strafeTo(new Vector2d(0, 122));
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(0, 122, Math.toRadians(140)))
-                .strafeToSplineHeading(new Vector2d(10,115),Math.toRadians(0))
+                .strafeToSplineHeading(new Vector2d(12,112),Math.toRadians(0))
                 //.turnTo(Math.toRadians(0))//get second sample
-                .strafeTo(new Vector2d(10,126));
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(9, 126, Math.toRadians(0)))
+                .strafeTo(new Vector2d(8.25,124.5)); //change
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(8.25, 124.5, Math.toRadians(0)))
                 .waitSeconds(2.8)
                 .strafeToSplineHeading(new Vector2d(15,115),Math.toRadians(145)) //face basket
-                .strafeTo(new Vector2d(0, 122));
-        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(0,122, Math.toRadians(145)))
-                .strafeTo(new Vector2d(3, 120))
-                .turnTo(Math.toRadians(0));//get third sample;
+                .strafeTo(new Vector2d(-1.5, 122));
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-1.5,122, Math.toRadians(145)))
+                .strafeToSplineHeading(new Vector2d(3, 116),0);
+        TrajectoryActionBuilder waitTab = drive.actionBuilder(new Pose2d(0,122, Math.toRadians(145)))
+                .waitSeconds(1)
+                .turn(Math.toRadians(0.1));
+        TrajectoryActionBuilder waitTab2 = drive.actionBuilder(new Pose2d(0,122, Math.toRadians(145)))
+                .waitSeconds(1)
+                .turn(Math.toRadians(0.1));
+
 //        TrajectoryActionBuilder tab9 = drive.actionBuilder(new Pose2d(-4,122,Math.toRadians(140)))
 //                .strafeTo(new Vector2d(10, 120))
 //                .strafeTo(new Vector2d(5,125));
@@ -62,6 +67,8 @@ public class AUTON2025REDLEFT_4 extends LinearOpMode{
         Action fifthTrajectory = tab5.build();
         Action sixthTrajectory = tab6.build();
         Action seventhTrajectory = tab7.build();
+        Action wait = waitTab.build();
+        Action wait2 = waitTab2.build();
         //Action eighthTrajectory = tab8.build();
 
         Actions.runBlocking(
@@ -69,7 +76,7 @@ public class AUTON2025REDLEFT_4 extends LinearOpMode{
                         new ParallelAction(
                                 intake_angle.RotatePosition0(),
                                 arm1.liftRungUp(),
-                                arm2.liftRungUp(),
+                                arm2.LiftRungUp(),
                                 claw.closeClaw(),
                                 firstTrajectory
                         ),
@@ -81,19 +88,22 @@ public class AUTON2025REDLEFT_4 extends LinearOpMode{
                                 arm2.liftFloorUp(),
                                 thirdTrajectory
                         ),
+                        arm1.LiftFloorDownDown(),
                         claw.closeClaw(),
+                        wait,
                         new ParallelAction(
+                            fourthTrajectory,
                             arm1.liftBucketUp(),
-                            arm2.liftBucketUp(),
-                                fourthTrajectory
+                            arm2.liftBucketUp()
                         ),
                         claw.openClaw(),
                         fifthTrajectory,
                         new ParallelAction(
-                                arm1.LiftFloorDown()
+                                arm1.LiftFloorDownDown()
                                 //arm2.LiftFloorDown()
                         ),
                         claw.closeClaw(),
+                        wait2,
                         new ParallelAction(
                                 arm1.liftBucketUp(),
                                 //arm2.liftBucketUp(),
@@ -103,7 +113,8 @@ public class AUTON2025REDLEFT_4 extends LinearOpMode{
                         seventhTrajectory,
                         new ParallelAction(
                                 arm1.liftDown(),
-                                arm2.liftDown()
+                                arm2.liftDown(),
+                                intake_angle.RotatePosition1()
                         )
 //                        claw.closeClaw(),
 //                        new ParallelAction(

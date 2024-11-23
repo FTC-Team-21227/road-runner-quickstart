@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 public class AUTON2025REDRIGHT_3 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d initialPose = new Pose2d(0, 55, Math.toRadians(0));
+        Pose2d initialPose = new Pose2d(-0.5, 55, Math.toRadians(0));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         ARM1 arm1 = new ARM1(hardwareMap);
         ARM2 arm2 = new ARM2(hardwareMap);
@@ -24,32 +24,37 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
         INTAKE_ANGLE intake_angle = new INTAKE_ANGLE(hardwareMap);
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(10,60))
+                .strafeTo(new Vector2d(10.5,60))
                 .waitSeconds(1);
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(10, 60, 0))
-                .strafeTo(new Vector2d(5,60))
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(10.5, 60, 0))
+                .strafeToSplineHeading(new Vector2d(5,60),0)
                 ;
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(5, 60, 0))
-                .strafeTo(new Vector2d(0, 30))
-                .strafeTo(new Vector2d(45,30))
-                .strafeTo(new Vector2d(45, 20))
-                .strafeTo(new Vector2d(5,20))
-                .strafeTo(new Vector2d(45,20))
-                .strafeTo(new Vector2d(45,12))
-                .strafeTo(new Vector2d(5,12));
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(5, 12, 0))
-                .strafeTo(new Vector2d(5,30))
+                .strafeTo(new Vector2d(5, 30))
+                .strafeTo(new Vector2d(43,30))
+                .strafeTo(new Vector2d(43, 20))
+                .strafeTo(new Vector2d(13,20))
+                .strafeTo(new Vector2d(43,20))
+                .strafeTo(new Vector2d(43,8))
+                .strafeToSplineHeading(new Vector2d(13,8),0);
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(13, 8, 0))
+                //.strafeTo(new Vector2d(5,12))
+                .strafeTo(new Vector2d(6,50))
                 .turnTo(Math.toRadians(-90));
-        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(5, 30, -90))
-                .strafeTo(new Vector2d(5,25));
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(5, 25, -90))
+        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(6, 50, Math.toRadians(-90)))
+                .strafeTo(new Vector2d(6,30))
+                .strafeTo(new Vector2d(6,29.75));
+                //.strafeTo(new Vector2d(6,30));
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(6, 30, Math.toRadians(-90)))
+                .waitSeconds(1)
                 .turnTo(Math.toRadians(0))
-                .strafeTo(new Vector2d(5,72));
-        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(5, 72, 0))
-                .strafeTo(new Vector2d(10,72));
-        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(10, 72, 0))
-                .strafeTo(new Vector2d(5,72))
+                .strafeTo(new Vector2d(5,65));
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(5, 65, 0))
+                .strafeTo(new Vector2d(18,65));
+        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(18, 65, 0))
                 .strafeTo(new Vector2d(0, 10));
+        TrajectoryActionBuilder tab9 = drive.actionBuilder(new Pose2d(10, 72, 0))
+                .waitSeconds(0.5);
 
         claw.closeClaw();
         intake_angle.RotatePosition0();
@@ -64,6 +69,7 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
         Action sixthTrajectory = tab6.build();
         Action seventhTrajectory = tab7.build();
         Action eighthTrajectory = tab8.build();
+        Action bbb = tab9.build();
 
 
 
@@ -72,7 +78,7 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
                         new ParallelAction(
                                 intake_angle.RotatePosition0(),
                                 arm1.liftRungUp(),
-                                arm2.liftRungUp(),
+                                arm2.LiftRungUp(),
                                 claw.closeClaw(),
                                 firstTrajectory
                         ),
@@ -92,17 +98,20 @@ public class AUTON2025REDRIGHT_3 extends LinearOpMode {
                         ),
                         fifthTrajectory,
                         claw.closeClaw(),
+                        bbb,
                         new ParallelAction(
-                            arm1.liftRungUp(),
-                            arm2.liftRungUp(),
+                            arm1.liftRungUperp(),
+                            //arm2.LiftRungDown(),
                             sixthTrajectory
                         ),
                         seventhTrajectory,
-                        arm1.hookSpecimen(),
+                        //arm1.hookSpecimen(),
                         new ParallelAction(
+                            claw.openClaw(),
                             eighthTrajectory,
                             arm1.liftDown(),
-                            arm2.liftDown()
+                            arm2.liftDown(),
+                            intake_angle.RotatePosition1()
                         )
                 )
         );

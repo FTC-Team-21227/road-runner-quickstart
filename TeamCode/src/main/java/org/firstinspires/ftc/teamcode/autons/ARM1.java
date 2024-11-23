@@ -75,7 +75,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos < 4258) {
+            if (pos < 4158) {
                 return true;
             } else {
                 arm1.setPower(0);
@@ -85,6 +85,28 @@ public class ARM1 {
     }
     public Action liftRungUp() {
         return new LiftRungUp();
+    }
+    public class LiftRungUperp implements Action {
+        private boolean initialized = false;
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                arm1.setPower(1);
+                initialized = true;
+            }
+
+            double pos = arm1.getCurrentPosition();
+            if (pos < 5200) {
+                return true;
+            } else {
+                arm1.setPower(0);
+                return false;
+            }
+        }
+    }
+    public Action liftRungUperp() {
+        return new LiftRungUperp();
     }
     public class LiftWallUp implements Action {
         private boolean initialized = false;
@@ -97,7 +119,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos < 1351) {
+            if (pos < 2201) {
                 return true;
             } else {
                 arm1.setPower(0);
@@ -143,7 +165,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos > 0) {
+            if (pos > 950) {
                 return true;
             } else {
                 arm1.setPower(0);
@@ -152,6 +174,26 @@ public class ARM1 {
         }
     }
     public Action LiftFloorDown() {return new LiftFloorDown();}
+    public class LiftFloorDownDown implements Action {
+        private boolean initialized = false;
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                arm1.setPower(-1);
+                initialized = true;
+            }
+
+            double pos = arm1.getCurrentPosition();
+            if (pos > 700) {
+                return true;
+            } else {
+                arm1.setPower(0);
+                return false;
+            }
+        }
+    }
+    public Action LiftFloorDownDown() {return new LiftFloorDownDown();}
     public class LiftDown implements Action {
         private boolean initialized = false;
 
@@ -163,7 +205,7 @@ public class ARM1 {
             }
 
             double pos = arm1.getCurrentPosition();
-            if (pos > 200) { //change if the lift presses down too hard
+            if (pos > 800) { //change if the lift presses down too hard
                 return true;
             } else {
                 arm1.setPower(0);

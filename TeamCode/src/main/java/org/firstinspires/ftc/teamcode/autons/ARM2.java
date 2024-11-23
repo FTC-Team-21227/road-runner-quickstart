@@ -63,6 +63,31 @@ public class ARM2 {
             }
         }
     }
+    public Action LiftRungUp() {
+        return new LiftRungUp();
+    }
+    public class LiftRungDown implements Action {
+        private boolean initialized = false;
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                arm2.setPower(-1);
+                initialized = true;
+            }
+
+            double pos = arm2.getCurrentPosition();
+            if (pos >= 6293) {
+                return true;
+            } else {
+                arm2.setPower(0);
+                return false;
+            }
+        }
+    }
+    public Action LiftRungDown() {
+        return new LiftRungDown();
+    }
 
 
     public class LiftLowBasketUp implements Action {
@@ -88,9 +113,7 @@ public class ARM2 {
 
 
 
-    public Action liftRungUp() {
-        return new LiftRungUp();
-    }
+
     public class LiftWallUp implements Action {
         private boolean initialized = false;
 
@@ -188,7 +211,7 @@ public class ARM2 {
                 initialized = true;
             }
             double pos = arm2.getCurrentPosition();
-            if (pos > 200) {
+            if (pos > 800) {
                 return true;
             } else {
                 arm2.setPower(0);
