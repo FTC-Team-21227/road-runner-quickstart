@@ -78,7 +78,7 @@ public class AUTON2025REDLEFT_3 extends LinearOpMode{
                         new ParallelAction(
                                 intake_angle.RotatePosition0(),
                                 arm1.liftRungUp(),
-                                arm2.liftRungUp(),
+                                arm2.LiftRungUp(),
                                 claw.closeClaw(),
                                 firstTrajectory
                         ),
